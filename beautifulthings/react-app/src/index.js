@@ -5,12 +5,12 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
 const startApp = () => {
-    ReactDOM.render(<App />, document.getElementById('root'));
-    registerServiceWorker();
+  ReactDOM.render(<App />, document.getElementById('root'));
+  registerServiceWorker();
 }
 
 if( !window.cordova ) {
-    startApp()
+  startApp();
 } else {
-    document.addEventListener('deviceready', startApp, false)
+  document.addEventListener('deviceready', startApp, false);
 }

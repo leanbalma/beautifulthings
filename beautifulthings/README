@@ -1,8 +1,0 @@
-To integrate the react app into Cordova app, follow these instructions:
-
-1.  Delete all files from <cordova-root-dir>/www directory.
-2.  Edit the file <react-root-dir>/src/index.js to wrap the main logic
-    inside a function to call it after deviceready CordovaEvent.
-3.  Edit <react-root-dir>/public/index.html file to include cordova.js
-    file.
-
