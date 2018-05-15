@@ -1,2 +1,7 @@
-# Built react app
+# dependencies
+/node_modules
+/platforms
+/plugins
+
+# production - react-app built
 /www
