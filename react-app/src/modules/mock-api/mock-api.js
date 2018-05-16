@@ -1,6 +1,7 @@
 var db = {
   users: [],    // Array of {id, username, password}
-  sessions: []  // Array of {idUser, token}
+  sessions: [], // Array of {idUser, token}
+  entries: []   // Array of {id, idUser, date, text}
 };
 
 export function initializeMockDatabase(mockDb) {
@@ -9,6 +10,30 @@ export function initializeMockDatabase(mockDb) {
 
 export function clearDatabase() {
   db = {}
+}
+
+function getUserIdFromToken(token) {
+  let result = null;
+  db.sessions.some(session => {
+    if (token === session.token) {
+      result = session.idUser;
+      return true;
+    }
+  });
+
+  return result;
+}
+
+function getEntryByUserIdAndByDate(userId, date) {
+  let result = null;
+  db.entries.some(entry => {
+    if (entry.idUser === userId && entry.date === date) {
+      result = entry;
+      return true;
+    }
+  });
+
+  return result;
 }
 
 export function signUp(username, password) {
@@ -44,5 +69,26 @@ export function signIn(username, password) {
   });
 }
 
+export function set(token, date, text) {
+  return new Promise((resolve, reject) => {
+    let userId = getUserIdFromToken(token);
+    if (userId === null) reject(new ErrorInvalidToken());
+
+    let entry = getEntryByUserIdAndByDate(userId, date);
+    if (entry !== null) reject(new ErrorEntryAlreadyExists());
+
+    db.entries.push({
+      id:     db.entries.length,
+      idUser: userId,
+      date,
+      text
+    });
+
+    resolve(null);
+  });
+}
+
 export class ErrorUsernameAlreadyExists extends Error {}
 export class ErrorInvalidUsernameOrPassword extends Error {}
+export class ErrorInvalidToken extends Error {}
+export class ErrorEntryAlreadyExists extends Error {}
