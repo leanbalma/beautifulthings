@@ -12,6 +12,10 @@ export function clearDatabase() {
   db = {}
 }
 
+export function getDatabase() {
+  return db;
+}
+
 function getUserIdFromToken(token) {
   let result = null;
   db.sessions.some(session => {
@@ -75,14 +79,17 @@ export function set(token, date, text) {
     if (userId === null) reject(new ErrorInvalidToken());
 
     let entry = getEntryByUserIdAndByDate(userId, date);
-    if (entry !== null) reject(new ErrorEntryAlreadyExists());
-
-    db.entries.push({
-      id:     db.entries.length,
-      idUser: userId,
-      date,
-      text
-    });
+    if (entry !== null) {
+      db.entries[entry.id]['text'] = text;
+    }
+    else {
+      db.entries.push({
+        id:     db.entries.length,
+        idUser: userId,
+        date,
+        text
+      });
+    }
 
     resolve(null);
   });
@@ -91,4 +98,3 @@ export function set(token, date, text) {
 export class ErrorUsernameAlreadyExists extends Error {}
 export class ErrorInvalidUsernameOrPassword extends Error {}
 export class ErrorInvalidToken extends Error {}
-export class ErrorEntryAlreadyExists extends Error {}

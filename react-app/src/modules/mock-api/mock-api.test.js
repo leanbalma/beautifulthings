@@ -77,10 +77,9 @@ describe('initializes database with one user logged-in with one entry', () => {
   });
 
   test('sets an existing entry', async () => {
-    expect.assertions(1);
-    await expect(
-      api.set('token', '1900-01-01', 'Trying to modify an existing entry')
-    ).rejects.toBeInstanceOf(api.ErrorEntryAlreadyExists);
+    expect.assertions(2);
+    await expect(api.set('token', '1900-01-01', 'Modify an existing entry')).resolves.toBeNull();
+    expect(api.getDatabase().entries[0]['text']).toBe('Modify an existing entry');
   });
 
   test('sets a new entry with invalid token', async () => {
