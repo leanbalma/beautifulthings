@@ -1,7 +1,8 @@
 var db = {
-  users: [],    // Array of {id, username, password}
-  sessions: [], // Array of {idUser, token}
-  entries: []   // Array of {id, idUser, date, text}
+  users: [],        // Array of {id, username, password}
+  sessions: [],     // Array of {idUser, token}
+  entries: [],      // Array of {id, date, text}
+  usersEntries: []  // Array of {idUser, idEntry}
 };
 
 export function initializeMockDatabase(mockDb) {
@@ -28,23 +29,16 @@ function getUserIdFromToken(token) {
   return result;
 }
 
-function getEntryByUserIdAndByDate(userId, date) {
-  let result = null;
-  db.entries.some(entry => {
-    if (entry.idUser === userId && entry.date === date) {
-      result = entry;
-      return true;
-    }
-  });
-
-  return result;
+function getUserEntries(userId) {
+  return db.usersEntries
+    .filter(userEntry => userEntry.idUser === userId)
+    .map(userEntry => db.entries[userEntry.idEntry]);
 }
 
 export function signUp(username, password) {
   return new Promise((resolve, reject) => {
-    db.users.some(user => {
-      if (username === user.username) reject(new ErrorUsernameAlreadyExists());
-    });
+    db.users.some(user =>
+      (username === user.username) ? reject(new ErrorUsernameAlreadyExists()) : false);
 
     db.users.push({
       id: db.users.length,
@@ -78,17 +72,21 @@ export function set(token, date, text) {
     let userId = getUserIdFromToken(token);
     if (userId === null) reject(new ErrorInvalidToken());
 
-    let entry = getEntryByUserIdAndByDate(userId, date);
-    if (entry !== null) {
-      db.entries[entry.id]['text'] = text;
-    }
-    else {
+    let userEntries = getUserEntries(userId);
+    let entryAtDate = userEntries.filter(entry => entry.date === date)[0];
+    if (entryAtDate === undefined) {
       db.entries.push({
-        id:     db.entries.length,
-        idUser: userId,
+        id: db.entries.length,
         date,
         text
       });
+      db.usersEntries.push({
+        idUser:   userId,
+        idEntry:  db.entries.length - 1
+      });
+    }
+    else {
+      db.entries[entryAtDate.id].text = text;
     }
 
     resolve(null);

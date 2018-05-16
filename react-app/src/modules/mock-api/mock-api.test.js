@@ -63,9 +63,12 @@ describe('initializes database with one user logged-in with one entry', () => {
     }],
     entries: [{
       id:     0,
-      idUser: 0,
       date:   '1900-01-01',
       text:   'Original message'
+    }],
+    usersEntries: [{
+      idUser:   0,
+      idEntry:  0
     }]
   }));
 
