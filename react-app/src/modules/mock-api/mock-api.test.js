@@ -192,4 +192,15 @@ describe('initializes database with one user logged-in with one preference', () 
       api.enumerate('invalidToken', 'key', 'new value')
     ).rejects.toBeInstanceOf(api.ErrorInvalidToken);
   });
+
+  test('gets user preferences', async () => {
+    expect.assertions(1);
+    await api.getPref('token')
+      .then(response => expect(response.preferences).toEqual(api.getDatabase().preferences));
+  });
+
+  test('gest user preferences with invalid token', async () => {
+    expect.assertions(1);
+    await expect(api.getPref('invalidToken')).rejects.toBeInstanceOf(api.ErrorInvalidToken);
+  });
 });

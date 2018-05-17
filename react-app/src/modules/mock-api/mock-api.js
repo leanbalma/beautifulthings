@@ -131,6 +131,17 @@ export function setPref(token, key, value) {
   });
 }
 
+export function getPref(token) {
+  return new Promise((resolve, reject) => {
+    let userId = getUserIdFromToken(token);
+    (userId === null) ?
+      reject(new ErrorInvalidToken()) :
+      resolve({
+        preferences: getUserPreferences(userId)
+      });
+  })
+}
+
 export class ErrorUsernameAlreadyExists extends Error {}
 export class ErrorInvalidUsernameOrPassword extends Error {}
 export class ErrorInvalidToken extends Error {}
