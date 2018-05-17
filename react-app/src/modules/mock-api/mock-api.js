@@ -1,8 +1,10 @@
 var db = {
-  users: [],        // Array of {id, username, password}
-  sessions: [],     // Array of {idUser, token}
-  entries: [],      // Array of {id, date, text}
-  usersEntries: []  // Array of {idUser, idEntry}
+  users: [],            // Array of {id, username, password}
+  sessions: [],         // Array of {idUser, token}
+  entries: [],          // Array of {id, date, text}
+  usersEntries: [],     // Array of {idUser, idEntry}
+  preferences: [],      // Array of {id, key, value}
+  usersPreferences: []  // Array of {idUser, idPreference}
 };
 
 export function initializeMockDatabase(mockDb) {
@@ -33,6 +35,12 @@ function getUserEntries(userId) {
   return db.usersEntries
     .filter(userEntry => userEntry.idUser === userId)
     .map(userEntry => db.entries[userEntry.idEntry]);
+}
+
+function getUserPreferences(userId) {
+  return db.usersPreferences
+    .filter(userPreference => userPreference.idUser === userId)
+    .map(userPreference => db.preferences[userPreference.idPreference]);
 }
 
 export function signUp(username, password) {
@@ -107,6 +115,23 @@ export function enumerate(token, from, to) {
   });
 }
 
+export function setPref(token, key, value) {
+  return new Promise((resolve, reject) => {
+    let userId = getUserIdFromToken(token);
+    if (userId === null) reject(new ErrorInvalidToken());
+
+    let preferenceToSet = getUserPreferences(userId)
+      .filter(preference => preference.key === key)[0];
+
+    (preferenceToSet === undefined) ?
+      reject(new ErrorInvalidPreference()) :
+      db.preferences[preferenceToSet.id].value = value;
+
+    resolve(null);
+  });
+}
+
 export class ErrorUsernameAlreadyExists extends Error {}
 export class ErrorInvalidUsernameOrPassword extends Error {}
 export class ErrorInvalidToken extends Error {}
+export class ErrorInvalidPreference extends Error {}

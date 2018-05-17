@@ -151,3 +151,45 @@ describe('initializes database with one user logged-in with three entries', () =
     ).rejects.toBeInstanceOf(api.ErrorInvalidToken);
   });
 });
+
+describe('initializes database with one user logged-in with one preference', () => {
+  beforeEach(() => api.initializeMockDatabase({
+    users: [{
+      id:       0,
+      username: 'username',
+      password: 'password'
+    }],
+    sessions: [{
+      idUser: 0,
+      token:  'token'
+    }],
+    preferences: [{
+      id:     0,
+      key:    'key',
+      value:  'value'
+    }],
+    usersPreferences: [{
+      idUser:       0,
+      idPreference: 0
+    }]
+  }));
+
+  test('sets the user preference', async () => {
+    expect.assertions(2);
+    await expect(api.setPref('token', 'key', 'newValue')).resolves.toBeNull();
+    await expect(api.getDatabase().preferences[0].value).toBe('newValue');
+  });
+
+  test('sets an unexisting user preference', async () => {
+    expect.assertions(1);
+    await expect(api.setPref('token', 'unexistingKey', 'value'))
+      .rejects.toBeInstanceOf(api.ErrorInvalidPreference);
+  });
+
+  test('sets the user preference with invalid token', async () => {
+    expect.assertions(1);
+    await expect(
+      api.enumerate('invalidToken', 'key', 'new value')
+    ).rejects.toBeInstanceOf(api.ErrorInvalidToken);
+  });
+});
