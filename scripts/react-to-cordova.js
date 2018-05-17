@@ -22,6 +22,11 @@ if (process.argv.length !== 4) {
 }
 
 try {
+  if (!fs.existsSync(`./platforms/${process.argv[3]}`)) {
+    console.log(`Adding Cordova ${process.argv[3]} platform...`);
+    if (!fs.existsSync('./www')) fs.mkdirSync('./www');
+    execSync(`cordova platform add ${process.argv[3]}`);
+  }
   console.log('Building react app...');
   execSync('cd react-app && npm run build');
   console.log('react-app built');
