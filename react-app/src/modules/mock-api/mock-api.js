@@ -21,13 +21,7 @@ export function getDatabase() {
 
 function getUserIdFromToken(token) {
   let result = null;
-  db.sessions.some(session => {
-    if (token === session.token) {
-      result = session.idUser;
-      return true;
-    }
-  });
-
+  db.sessions.some(session => (token === session.token) ? result = session.idUser : null);
   return result;
 }
 
@@ -46,7 +40,7 @@ function getUserPreferences(userId) {
 export function signUp(username, password) {
   return new Promise((resolve, reject) => {
     db.users.some(user =>
-      (username === user.username) ? reject(new ErrorUsernameAlreadyExists()) : false);
+      (username === user.username) ? reject(new ErrorUsernameAlreadyExists()) : null);
 
     db.users.push({
       id: db.users.length,
@@ -62,7 +56,7 @@ export function signIn(username, password) {
   return new Promise((resolve, reject) => {
     db.users.some(user => {
       if (username === user.username && password === user.password) {
-        let token = Math.random().toString(36).substr(2); // No verification if token already exists
+        const token = Math.random().toString(36).substr(2);
         db.sessions.push({
           idUser: user.id,
           token
@@ -77,11 +71,10 @@ export function signIn(username, password) {
 
 export function set(token, date, text) {
   return new Promise((resolve, reject) => {
-    let userId = getUserIdFromToken(token);
+    const userId = getUserIdFromToken(token);
     if (userId === null) reject(new ErrorInvalidToken());
 
-    let userEntries = getUserEntries(userId);
-    let entryAtDate = userEntries.filter(entry => entry.date === date)[0];
+    const entryAtDate = getUserEntries(userId).filter(entry => entry.date === date)[0];
     if (entryAtDate === undefined) {
       db.entries.push({
         id: db.entries.length,
@@ -103,10 +96,10 @@ export function set(token, date, text) {
 
 export function enumerate(token, from, to) {
   return new Promise((resolve, reject) => {
-    let userId = getUserIdFromToken(token);
+    const userId = getUserIdFromToken(token);
     if (userId === null) reject(new ErrorInvalidToken());
 
-    let entries = getUserEntries(userId)
+    const entries = getUserEntries(userId)
       .filter(entry => new Date(from) <= new Date(entry.date) && new Date(entry.date) <= new Date(to));
 
     resolve({
@@ -117,10 +110,10 @@ export function enumerate(token, from, to) {
 
 export function setPref(token, key, value) {
   return new Promise((resolve, reject) => {
-    let userId = getUserIdFromToken(token);
+    const userId = getUserIdFromToken(token);
     if (userId === null) reject(new ErrorInvalidToken());
 
-    let preferenceToSet = getUserPreferences(userId)
+    const preferenceToSet = getUserPreferences(userId)
       .filter(preference => preference.key === key)[0];
 
     (preferenceToSet === undefined) ?
@@ -133,7 +126,7 @@ export function setPref(token, key, value) {
 
 export function getPref(token) {
   return new Promise((resolve, reject) => {
-    let userId = getUserIdFromToken(token);
+    const userId = getUserIdFromToken(token);
     (userId === null) ?
       reject(new ErrorInvalidToken()) :
       resolve({
