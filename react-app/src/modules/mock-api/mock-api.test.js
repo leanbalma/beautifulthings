@@ -92,3 +92,62 @@ describe('initializes database with one user logged-in with one entry', () => {
     ).rejects.toBeInstanceOf(api.ErrorInvalidToken);
   });
 });
+
+describe('initializes database with one user logged-in with three entries', () => {
+  beforeEach(() => api.initializeMockDatabase({
+    users: [{
+      id:       0,
+      username: 'username',
+      password: 'password'
+    }],
+    sessions: [{
+      idUser: 0,
+      token:  'token'
+    }],
+    entries: [{
+      id:     0,
+      date:   '2018-01-01',
+      text:   'First week'
+    }, {
+      id:     1,
+      date:   '2018-01-08',
+      text:   'Second week'
+    }, {
+      id:     2,
+      date:   '2018-01-15',
+      text:   'Third week'
+    }],
+    usersEntries: [{
+      idUser:   0,
+      idEntry:  0
+    }, {
+      idUser:   0,
+      idEntry:  1
+    }, {
+      idUser:   0,
+      idEntry:  2
+    }]
+  }));
+
+  test('enumerates all entries', async () => {
+    expect.assertions(1);
+    await api.enumerate('token', '1900-01-01', '2020-01-01')
+      .then(result => expect(result.entries.length).toBe(3));
+  });
+
+  test('enumerates second entry only', async () => {
+    expect.assertions(2);
+    await api.enumerate('token', '2018-01-07', '2018-01-09')
+      .then(result => {
+        expect(result.entries.length).toBe(1);
+        expect(result.entries[0]).toEqual(api.getDatabase().entries[1]);
+      });
+  });
+
+  test('enumerates with invalid token', async () => {
+    expect.assertions(1);
+    await expect(
+      api.enumerate('invalidToken', '1900-01-01', '2020-01-01')
+    ).rejects.toBeInstanceOf(api.ErrorInvalidToken);
+  });
+});

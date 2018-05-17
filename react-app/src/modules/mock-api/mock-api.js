@@ -93,6 +93,20 @@ export function set(token, date, text) {
   });
 }
 
+export function enumerate(token, from, to) {
+  return new Promise((resolve, reject) => {
+    let userId = getUserIdFromToken(token);
+    if (userId === null) reject(new ErrorInvalidToken());
+
+    let entries = getUserEntries(userId)
+      .filter(entry => new Date(from) <= new Date(entry.date) && new Date(entry.date) <= new Date(to));
+
+    resolve({
+      entries
+    });
+  });
+}
+
 export class ErrorUsernameAlreadyExists extends Error {}
 export class ErrorInvalidUsernameOrPassword extends Error {}
 export class ErrorInvalidToken extends Error {}
