@@ -37,101 +37,113 @@ function getUserPreferences(userId) {
     .map(userPreference => db.preferences[userPreference.idPreference]);
 }
 
-export function signUp(username, password) {
+export function signUp(username, password, delay = 1000) {
   return new Promise((resolve, reject) => {
-    db.users.some(user =>
-      (username === user.username) ? reject(new ErrorUsernameAlreadyExists()) : null);
-
-    db.users.push({
-      id: db.users.length,
-      username,
-      password
-    });
-
-    resolve(null);
+    setTimeout(() => {
+      db.users.some(user =>
+        (username === user.username) ? reject(new ErrorUsernameAlreadyExists()) : null);
+  
+      db.users.push({
+        id: db.users.length,
+        username,
+        password
+      });
+  
+      resolve(null);
+    }, delay);
   });
 }
 
-export function signIn(username, password) {
+export function signIn(username, password, delay = 1000) {
   return new Promise((resolve, reject) => {
-    db.users.some(user => {
-      if (username === user.username && password === user.password) {
-        const token = Math.random().toString(36).substr(2);
-        db.sessions.push({
-          idUser: user.id,
-          token
+    setTimeout(() => {
+      db.users.some(user => {
+        if (username === user.username && password === user.password) {
+          const token = Math.random().toString(36).substr(2);
+          db.sessions.push({
+            idUser: user.id,
+            token
+          });
+          resolve(token);
+        }
+      });
+
+      reject(new ErrorInvalidUsernameOrPassword());
+    }, delay);
+  });
+}
+
+export function set(token, date, text, delay = 1000) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const userId = getUserIdFromToken(token);
+      if (userId === null) reject(new ErrorInvalidToken());
+
+      const entryAtDate = getUserEntries(userId).filter(entry => entry.date === date)[0];
+      if (entryAtDate === undefined) {
+        db.entries.push({
+          id: db.entries.length,
+          date,
+          text
         });
-        resolve(token);
+        db.usersEntries.push({
+          idUser:   userId,
+          idEntry:  db.entries.length - 1
+        });
       }
-    });
+      else {
+        db.entries[entryAtDate.id].text = text;
+      }
 
-    reject(new ErrorInvalidUsernameOrPassword());
+      resolve(null);
+    }, delay);
   });
 }
 
-export function set(token, date, text) {
+export function enumerate(token, from, to, delay = 1000) {
   return new Promise((resolve, reject) => {
-    const userId = getUserIdFromToken(token);
-    if (userId === null) reject(new ErrorInvalidToken());
+    setTimeout(() => {
+      const userId = getUserIdFromToken(token);
+      if (userId === null) reject(new ErrorInvalidToken());
 
-    const entryAtDate = getUserEntries(userId).filter(entry => entry.date === date)[0];
-    if (entryAtDate === undefined) {
-      db.entries.push({
-        id: db.entries.length,
-        date,
-        text
-      });
-      db.usersEntries.push({
-        idUser:   userId,
-        idEntry:  db.entries.length - 1
-      });
-    }
-    else {
-      db.entries[entryAtDate.id].text = text;
-    }
+      const entries = getUserEntries(userId)
+        .filter(entry => new Date(from) <= new Date(entry.date) && new Date(entry.date) <= new Date(to));
 
-    resolve(null);
-  });
-}
-
-export function enumerate(token, from, to) {
-  return new Promise((resolve, reject) => {
-    const userId = getUserIdFromToken(token);
-    if (userId === null) reject(new ErrorInvalidToken());
-
-    const entries = getUserEntries(userId)
-      .filter(entry => new Date(from) <= new Date(entry.date) && new Date(entry.date) <= new Date(to));
-
-    resolve({
-      entries
-    });
-  });
-}
-
-export function setPref(token, key, value) {
-  return new Promise((resolve, reject) => {
-    const userId = getUserIdFromToken(token);
-    if (userId === null) reject(new ErrorInvalidToken());
-
-    const preferenceToSet = getUserPreferences(userId)
-      .filter(preference => preference.key === key)[0];
-
-    (preferenceToSet === undefined) ?
-      reject(new ErrorInvalidPreference()) :
-      db.preferences[preferenceToSet.id].value = value;
-
-    resolve(null);
-  });
-}
-
-export function getPref(token) {
-  return new Promise((resolve, reject) => {
-    const userId = getUserIdFromToken(token);
-    (userId === null) ?
-      reject(new ErrorInvalidToken()) :
       resolve({
-        preferences: getUserPreferences(userId)
+        entries
       });
+    }, delay);
+  });
+}
+
+export function setPref(token, key, value, delay = 1000) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const userId = getUserIdFromToken(token);
+      if (userId === null) reject(new ErrorInvalidToken());
+
+      const preferenceToSet = getUserPreferences(userId)
+        .filter(preference => preference.key === key)[0];
+
+      (preferenceToSet === undefined) ?
+        reject(new ErrorInvalidPreference()) :
+        db.preferences[preferenceToSet.id].value = value;
+
+      resolve(null);
+    }, delay);
+  });
+}
+
+export function getPref(token, delay = 1000) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const userId = getUserIdFromToken(token);
+      (userId === null) ?
+        reject(new ErrorInvalidToken()) :
+        resolve({
+          preferences: getUserPreferences(userId)
+        });
+    }, delay);
   })
 }
 
