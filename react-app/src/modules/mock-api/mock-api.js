@@ -1,153 +1,124 @@
-var db = {
-  users: [],            // Array of {id, username, password}
-  sessions: [],         // Array of {idUser, token}
-  entries: [],          // Array of {id, date, text}
-  usersEntries: [],     // Array of {idUser, idEntry}
-  preferences: [],      // Array of {id, key, value}
-  usersPreferences: []  // Array of {idUser, idPreference}
-};
+const DEFAULT_DELAY_MS = 1000;
+
+let db = {
+  usersById:            {}, // key: user-id-x: { username: 'username', password: 'password' }
+  tokensByUser:         {}, // key: user-id-x: 'token'
+  entriesById:          {}, // key: entry-id-x: { date: 'YYYY-MM-DD', text: 'text' }
+  entriesByUser:        {}, // key: user-id-x: [ 'entry-id-x', 'entry-id-y' ]
+  entriesByUserByDate:  {}, // key: user-id-x-yyyy-mm-dd: entry-id-x
+  preferencesByUser:    {}  // key: user-id-x: { keys: values }
+}
 
 export function initializeMockDatabase(mockDb) {
   db = mockDb;
 }
 
 export function clearDatabase() {
-  db = {}
+  db = {
+    usersById:            {},
+    tokensByUser:         {},
+    entriesById:          {},
+    entriesByUser:        {},
+    entriesByUserByDate:  {},
+    preferencesByUser:    {}
+  }
 }
 
 export function getDatabase() {
   return db;
 }
 
-function getUserIdFromToken(token) {
-  let result = null;
-  db.sessions.some(session => (token === session.token) ? result = session.idUser : null);
-  return result;
+function _wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function getUserEntries(userId) {
-  return db.usersEntries
-    .filter(userEntry => userEntry.idUser === userId)
-    .map(userEntry => db.entries[userEntry.idEntry]);
+function _getUserIdByToken(token) {
+  for (let userId in db.tokensByUser)
+    if (db.tokensByUser[userId] === token) return userId;
+  return null;
 }
 
-function getUserPreferences(userId) {
-  return db.usersPreferences
-    .filter(userPreference => userPreference.idUser === userId)
-    .map(userPreference => db.preferences[userPreference.idPreference]);
+function _getEntriesByUserId(userId) {
+  return db.entriesByUser[userId].map(entryId => db.entriesById[entryId]);
 }
 
-export function signUp(username, password, delay = 1000) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      db.users.some(user =>
-        (username === user.username) ? reject(new ErrorUsernameAlreadyExists()) : null);
-  
-      db.users.push({
-        id: db.users.length,
-        username,
-        password
-      });
-  
-      resolve(null);
-    }, delay);
-  });
+export async function signUp(username, password, delay = DEFAULT_DELAY_MS) {
+  await _wait(delay);
+  for (let userId in db.usersById)
+    if (db.usersById[userId].username === username) throw new ErrorUsernameAlreadyExists();
+
+  db.usersById['user-id-' + (Object.keys(db.usersById).length + 1)] = {
+    username,
+    password
+  }
+
+  return null;
 }
 
-export function signIn(username, password, delay = 1000) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      db.users.some(user => {
-        if (username === user.username && password === user.password) {
-          const token = Math.random().toString(36).substr(2);
-          db.sessions.push({
-            idUser: user.id,
-            token
-          });
-          resolve(token);
-        }
-      });
+export async function signIn(username, password, delay = DEFAULT_DELAY_MS) {
+  await _wait(delay);
+  for (let userId in db.usersById) {
+    let userData = db.usersById[userId];
+    if (userData.username === username && userData.password === password) {
+      const token = Math.random().toString(36).substr(2);
+      db.tokensByUser[userId] = token;
+      return token;
+    }
+  }
 
-      reject(new ErrorInvalidUsernameOrPassword());
-    }, delay);
-  });
+  throw new ErrorInvalidUsernameOrPassword();
 }
 
-export function set(token, date, text, delay = 1000) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const userId = getUserIdFromToken(token);
-      if (userId === null) reject(new ErrorInvalidToken());
+export async function set(token, date, text, delay = DEFAULT_DELAY_MS) {
+  await _wait(delay);
+  const userId = _getUserIdByToken(token);
+  if (userId === null) throw new ErrorInvalidToken();
 
-      const entryAtDate = getUserEntries(userId).filter(entry => entry.date === date)[0];
-      if (entryAtDate === undefined) {
-        db.entries.push({
-          id: db.entries.length,
-          date,
-          text
-        });
-        db.usersEntries.push({
-          idUser:   userId,
-          idEntry:  db.entries.length - 1
-        });
-      }
-      else {
-        db.entries[entryAtDate.id].text = text;
-      }
+  const entryIdForUserAtDate = db.entriesByUserByDate[userId + '-' + date];
+  if (entryIdForUserAtDate !== undefined) {
+    db.entriesById[entryIdForUserAtDate].text = text;
+  }
+  else {
+    const newEntryId = 'entry-id-' + (Object.keys(db.entriesById).length + 1);
+    db.entriesById[newEntryId] = {
+      date,
+      text
+    }
+    db.entriesByUser[userId].push(newEntryId);
+    db.entriesByUserByDate[userId + '-' + date] = newEntryId;
+  }
 
-      resolve(null);
-    }, delay);
-  });
+  return null;
 }
 
-export function enumerate(token, from, to, delay = 1000) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const userId = getUserIdFromToken(token);
-      if (userId === null) reject(new ErrorInvalidToken());
+export async function enumerate(token, from, to, delay = DEFAULT_DELAY_MS) {
+  await _wait(delay);
+  const userId = _getUserIdByToken(token);
+  if (userId === null) throw new ErrorInvalidToken();
 
-      const entries = getUserEntries(userId)
-        .filter(entry => new Date(from) <= new Date(entry.date) && new Date(entry.date) <= new Date(to));
+  const entries = _getEntriesByUserId(userId)
+    .filter(entry => new Date(from) <= new Date(entry.date) && new Date(entry.date) <= new Date(to));
 
-      resolve({
-        entries
-      });
-    }, delay);
-  });
+  return { entries };
 }
 
-export function setPref(token, key, value, delay = 1000) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const userId = getUserIdFromToken(token);
-      if (userId === null) reject(new ErrorInvalidToken());
+export async function setPref(token, key, value, delay = DEFAULT_DELAY_MS) {
+  await _wait(delay);
+  const userId = _getUserIdByToken(token);
+  if (userId === null) throw new ErrorInvalidToken();
 
-      const preferenceToSet = getUserPreferences(userId)
-        .filter(preference => preference.key === key)[0];
-
-      (preferenceToSet === undefined) ?
-        reject(new ErrorInvalidPreference()) :
-        db.preferences[preferenceToSet.id].value = value;
-
-      resolve(null);
-    }, delay);
-  });
+  db.preferencesByUser[userId][key] = value;
+  return null;
 }
 
-export function getPref(token, delay = 1000) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const userId = getUserIdFromToken(token);
-      (userId === null) ?
-        reject(new ErrorInvalidToken()) :
-        resolve({
-          preferences: getUserPreferences(userId)
-        });
-    }, delay);
-  })
+export async function getPref(token, delay = DEFAULT_DELAY_MS) {
+  await _wait(delay);
+  const userId = _getUserIdByToken(token);
+  if (userId === null) throw new ErrorInvalidToken();
+
+  return db.preferencesByUser[userId];
 }
 
 export class ErrorUsernameAlreadyExists extends Error {}
 export class ErrorInvalidUsernameOrPassword extends Error {}
 export class ErrorInvalidToken extends Error {}
-export class ErrorInvalidPreference extends Error {}
