@@ -5,7 +5,16 @@ import blake from 'blakejs';
 
 nacl.util = require('tweetnacl-util');
 
-var _username, _pk, _sk, _tz, _offset;
+let _username, _pk, _sk, _tz, _offset;
+
+export function clearAccount() {
+  _username = _pk = _sk = _tz = _offset = undefined;
+}
+
+export function setKeyPair(pk, sk) {
+  _pk = nacl.util.decodeBase64(pk);
+  _sk = nacl.util.decodeBase64(sk);
+}
 
 function _generateNonce(publicKeyA, publicKeyB) {
   let state = blake.blake2bInit(nacl.box.nonceLength, null);
@@ -43,27 +52,27 @@ export function bytes() {
 
 export function encrypt(plainText) {
   const messageToEncrypt = nacl.util.decodeUTF8(plainText);
-  let encryptedMessage =
+  let output =
     new Uint8Array(nacl.box.publicKeyLength + nacl.box.overheadLength + messageToEncrypt.length);
 
 	const ephemeralKeyPair = nacl.box.keyPair();
-	encryptedMessage.set(ephemeralKeyPair.publicKey);
+	output.set(ephemeralKeyPair.publicKey);
 
   const nonce = _generateNonce(ephemeralKeyPair.publicKey, _pk);
   const boxed = nacl.box(messageToEncrypt, nonce, _pk, ephemeralKeyPair.secretKey);
 
-	encryptedMessage.set(boxed, ephemeralKeyPair.publicKey.length);
-  return nacl.util.encodeBase64(encryptedMessage);
+	output.set(boxed, ephemeralKeyPair.publicKey.length);
+  return nacl.util.encodeBase64(output);
 }
 
 export function decrypt(cipherText) {
-  const encryptedMessage = nacl.util.decodeBase64(cipherText);
-  const ephemeralKeyPair = encryptedMessage.subarray(0, nacl.box.publicKeyLength);
+  const input = nacl.util.decodeBase64(cipherText);
+  const originalEphemeralPublicKey = input.subarray(0, nacl.box.publicKeyLength);
 
-  const nonce = _generateNonce(ephemeralKeyPair, _pk);
+  const nonce = _generateNonce(originalEphemeralPublicKey, _pk);
 
-  const boxData = encryptedMessage.subarray(nacl.box.publicKeyLength);
-	return nacl.util.encodeUTF8(nacl.box.open(boxData, nonce, ephemeralKeyPair, _sk));
+  const boxData = input.subarray(nacl.box.publicKeyLength);
+	return nacl.util.encodeUTF8(nacl.box.open(boxData, nonce, originalEphemeralPublicKey, _sk));
 }
 
 export function getUsername() {
@@ -83,7 +92,7 @@ export function getTimezone() {
 }
 
 export function setOffset(offset) {
-  // TODO: Note that tz could be HH:30 or even HH:45. setOffset have to set _offset and _tz.
+  // TODO: Note that tz could be HH:00, HH:30 or even HH:45. setOffset have to set _offset and _tz.
 }
 
 export function getOffset() {
