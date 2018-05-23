@@ -15,7 +15,7 @@ test('creates keypairs from username and password', async () => {
     });
 });
 
-test('encrypt and decrypt a message', async() => {
+test('encrypt and decrypt a message', () => {
   expect.assertions(2);
   account.setKeyPair('6FUygceUHlKzGu/5ir4FNkmAtUF07uNeAAdp9+5hcy4=',
                      'm4jBZuDiCgcCz94VIWHmeVC9IsXOIavniA2pqeq5Gg0=');
