@@ -49,12 +49,27 @@ function _getEntriesByUserId(userId) {
   return db.entriesByUser[userId].map(entryId => db.entriesById[entryId]);
 }
 
+function _getNextUserIdKey() {
+  return `user-id-${(Object.keys(db.usersById).length + 1)}`;
+}
+
+function _getNextEntryIdKey() {
+  return `entry-id-${(Object.keys(db.entriesById).length + 1)}`;
+}
+
+function _getEntryKeyByUserIdByDate(userId, date) {
+  return `${userId}-${date}`;
+}
+
 export async function signUp(username, password, delay = DEFAULT_DELAY_MS) {
   await _wait(delay);
-  for (let userId in db.usersById)
-    if (db.usersById[userId].username === username) throw new ErrorUsernameAlreadyExists();
+  for (let userId in db.usersById) {
+    if (db.usersById[userId].username === username) {
+      throw new ErrorUsernameAlreadyExists();
+    }
+  }
 
-  const newUserId = 'user-id-' + (Object.keys(db.usersById).length + 1);
+  const newUserId = _getNextUserIdKey();
   db.usersById[newUserId] = {
     username,
     password
@@ -71,8 +86,9 @@ export async function signIn(username, password, delay = DEFAULT_DELAY_MS) {
   await _wait(delay);
   for (let userId in db.usersById) {
     let userData = db.usersById[userId];
-    if (userData.username === username && userData.password === password)
+    if (userData.username === username && userData.password === password) {
       return Math.random().toString(36).substr(2);
+    }
   }
 
   throw new ErrorInvalidUsernameOrPassword();
@@ -82,18 +98,17 @@ export async function set(token, date, text, delay = DEFAULT_DELAY_MS) {
   await _wait(delay);
   const userId = _getUserIdByToken(token);
 
-  const entryIdForUserAtDate = db.entriesByUserByDate[userId + '-' + date];
+  const entryIdForUserAtDate = db.entriesByUserByDate[_getEntryKeyByUserIdByDate(userId, date)];
   if (entryIdForUserAtDate !== undefined) {
     db.entriesById[entryIdForUserAtDate].text = text;
-  }
-  else {
-    const newEntryId = 'entry-id-' + (Object.keys(db.entriesById).length + 1);
+  } else {
+    const newEntryId = _getNextEntryIdKey();
     db.entriesById[newEntryId] = {
       date,
       text
     }
     db.entriesByUser[userId].push(newEntryId);
-    db.entriesByUserByDate[userId + '-' + date] = newEntryId;
+    db.entriesByUserByDate[_getEntryKeyByUserIdByDate(userId, date)] = newEntryId;
   }
 
   return null;
