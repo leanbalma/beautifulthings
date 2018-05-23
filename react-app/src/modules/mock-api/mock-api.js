@@ -47,9 +47,14 @@ export async function signUp(username, password, delay = DEFAULT_DELAY_MS) {
   for (let userId in db.usersById)
     if (db.usersById[userId].username === username) throw new ErrorUsernameAlreadyExists();
 
-  db.usersById['user-id-' + (Object.keys(db.usersById).length + 1)] = {
+  const newUserId = 'user-id-' + (Object.keys(db.usersById).length + 1);
+  db.usersById[newUserId] = {
     username,
     password
+  }
+  db.entriesByUser[newUserId] = [];
+  db.preferencesByUser[newUserId] = {
+    notification: 'weekly'
   }
 
   return null;
