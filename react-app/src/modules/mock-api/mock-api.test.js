@@ -10,9 +10,6 @@ describe('initializes database with one user logged-in with one entry', () => {
         password: 'password'
       }
     },
-    tokensByUser: {
-      'user-id-1': 'token'
-    },
     entriesById: {
       'entry-id-1': {
         date: '2018-01-01',
@@ -76,12 +73,6 @@ describe('initializes database with one user logged-in with one entry', () => {
     expect(api.getDatabase().entriesById['entry-id-1'].text).toBe('New text');
   });
 
-  test('sets unsuccessfully a new entry with invalid token', async () => {
-    expect.assertions(1);
-    await expect(api.set('invalidToken', new Date().toISOString().slice(0, 10), 'New message', 0))
-      .rejects.toBeInstanceOf(api.ErrorInvalidToken);
-  });
-
   test('enumerates successfully existing entries', async () => {
     expect.assertions(2);
     await api.enumerate('token', '1900-01-01', '2050-01-01', 0)
@@ -90,22 +81,10 @@ describe('initializes database with one user logged-in with one entry', () => {
       .then(result => expect(result.entries.length).toBe(0));
   });
 
-  test('enumerates unsuccessfully with invalid token', async () => {
-    expect.assertions(1);
-    await expect(api.enumerate('invalidToken', '1900-01-01', '2050-01-01', 0))
-      .rejects.toBeInstanceOf(api.ErrorInvalidToken);
-  });
-
   test('sets successfully an existing user preference', async () => {
     expect.assertions(2);
     await expect(api.setPref('token', 'notification', 'monthly', 0)).resolves.toBeNull();
     expect(api.getDatabase().preferencesByUser['user-id-1'].notification).toBe('monthly');
-  });
-
-  test('sets unsuccessfully an user preference with invalid token', async () => {
-    expect.assertions(1);
-    await expect(api.enumerate('invalidToken', 'key', 'new value', 0))
-      .rejects.toBeInstanceOf(api.ErrorInvalidToken);
   });
 
   test('gets successfully user preferences', async () => {
@@ -113,10 +92,5 @@ describe('initializes database with one user logged-in with one entry', () => {
     await api.getPref('token', 0)
       .then(response => expect(response)
         .toEqual(api.getDatabase().preferencesByUser['user-id-1']));
-  });
-
-  test('gest unsuccessfully user preferences with invalid token', async () => {
-    expect.assertions(1);
-    await expect(api.getPref('invalidToken', 0)).rejects.toBeInstanceOf(api.ErrorInvalidToken);
   });
 });

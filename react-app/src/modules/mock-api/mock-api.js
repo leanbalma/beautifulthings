@@ -1,12 +1,22 @@
 const DEFAULT_DELAY_MS = 1000;
 
 let db = {
-  usersById:            {}, // key: user-id-x: { username: 'username', password: 'password' }
-  tokensByUser:         {}, // key: user-id-x: 'token'
-  entriesById:          {}, // key: entry-id-x: { date: 'YYYY-MM-DD', text: 'text' }
-  entriesByUser:        {}, // key: user-id-x: [ 'entry-id-x', 'entry-id-y' ]
-  entriesByUserByDate:  {}, // key: user-id-x-yyyy-mm-dd: entry-id-x
-  preferencesByUser:    {}  // key: user-id-x: { keys: values }
+  usersById: {
+    'user-id-1': {
+      username: 'demouser',
+      password: 'demopass'
+    }
+  },
+  entriesById: {},
+  entriesByUser: {
+    'user-id-1': []
+  },
+  entriesByUserByDate: {},
+  preferencesByUser: {
+    'user-id-1': {
+      notification: 'weekly'
+    }
+  }
 }
 
 export function initializeMockDatabase(mockDb) {
@@ -16,7 +26,6 @@ export function initializeMockDatabase(mockDb) {
 export function clearDatabase() {
   db = {
     usersById:            {},
-    tokensByUser:         {},
     entriesById:          {},
     entriesByUser:        {},
     entriesByUserByDate:  {},
@@ -33,9 +42,7 @@ function _wait(ms) {
 }
 
 function _getUserIdByToken(token) {
-  for (let userId in db.tokensByUser)
-    if (db.tokensByUser[userId] === token) return userId;
-  return null;
+  return 'user-id-1';
 }
 
 function _getEntriesByUserId(userId) {
@@ -64,11 +71,8 @@ export async function signIn(username, password, delay = DEFAULT_DELAY_MS) {
   await _wait(delay);
   for (let userId in db.usersById) {
     let userData = db.usersById[userId];
-    if (userData.username === username && userData.password === password) {
-      const token = Math.random().toString(36).substr(2);
-      db.tokensByUser[userId] = token;
-      return token;
-    }
+    if (userData.username === username && userData.password === password)
+      return Math.random().toString(36).substr(2);
   }
 
   throw new ErrorInvalidUsernameOrPassword();
@@ -77,7 +81,6 @@ export async function signIn(username, password, delay = DEFAULT_DELAY_MS) {
 export async function set(token, date, text, delay = DEFAULT_DELAY_MS) {
   await _wait(delay);
   const userId = _getUserIdByToken(token);
-  if (userId === null) throw new ErrorInvalidToken();
 
   const entryIdForUserAtDate = db.entriesByUserByDate[userId + '-' + date];
   if (entryIdForUserAtDate !== undefined) {
@@ -99,7 +102,6 @@ export async function set(token, date, text, delay = DEFAULT_DELAY_MS) {
 export async function enumerate(token, from, to, delay = DEFAULT_DELAY_MS) {
   await _wait(delay);
   const userId = _getUserIdByToken(token);
-  if (userId === null) throw new ErrorInvalidToken();
 
   const entries = _getEntriesByUserId(userId)
     .filter(entry => new Date(from) <= new Date(entry.date) && new Date(entry.date) <= new Date(to));
@@ -110,7 +112,6 @@ export async function enumerate(token, from, to, delay = DEFAULT_DELAY_MS) {
 export async function setPref(token, key, value, delay = DEFAULT_DELAY_MS) {
   await _wait(delay);
   const userId = _getUserIdByToken(token);
-  if (userId === null) throw new ErrorInvalidToken();
 
   db.preferencesByUser[userId][key] = value;
   return null;
@@ -119,11 +120,9 @@ export async function setPref(token, key, value, delay = DEFAULT_DELAY_MS) {
 export async function getPref(token, delay = DEFAULT_DELAY_MS) {
   await _wait(delay);
   const userId = _getUserIdByToken(token);
-  if (userId === null) throw new ErrorInvalidToken();
 
   return db.preferencesByUser[userId];
 }
 
 export class ErrorUsernameAlreadyExists extends Error {}
 export class ErrorInvalidUsernameOrPassword extends Error {}
-export class ErrorInvalidToken extends Error {}
