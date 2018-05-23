@@ -31,13 +31,13 @@ export function constructor(username, password) {
       p: 1,
       dkLen: 32,
       encoding: 'binary'
-    }, (function(derivedKey) {
-      const keypair = nacl.box.keyPair.fromSecretKey(derivedKey);
+    }, function(derivedKey) {
+      const keyPair = nacl.box.keyPair.fromSecretKey(derivedKey);
       _username = username;
-      _pk = keypair.publicKey;
-      _sk = keypair.secretKey;
+      _pk = keyPair.publicKey;
+      _sk = keyPair.secretKey;
       resolve(null);
-    }));
+    });
   });
 }
 
