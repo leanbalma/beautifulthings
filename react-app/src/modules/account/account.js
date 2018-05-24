@@ -11,7 +11,7 @@ export function clearAccount() {
   _username = _pk = _sk = _tz = _offset = undefined;
 }
 
-export function setKeyPair(pk, sk) {
+export function _setKeyPair(pk, sk) {
   _pk = nacl.util.decodeBase64(pk);
   _sk = nacl.util.decodeBase64(sk);
 }
