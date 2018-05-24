@@ -18,7 +18,7 @@ export function setKeyPair(pk, sk) {
 
 function _generateNonce(publicKeyA, publicKeyB) {
   let state = blake.blake2bInit(nacl.box.nonceLength, null);
-	blake.blake2bUpdate(state, publicKeyA);
+  blake.blake2bUpdate(state, publicKeyA);
   blake.blake2bUpdate(state, publicKeyB);
   return blake.blake2bFinal(state);
 }
@@ -55,13 +55,13 @@ export function encrypt(plainText) {
   let output =
     new Uint8Array(nacl.box.publicKeyLength + nacl.box.overheadLength + messageToEncrypt.length);
 
-	const ephemeralKeyPair = nacl.box.keyPair();
-	output.set(ephemeralKeyPair.publicKey);
+  const ephemeralKeyPair = nacl.box.keyPair();
+  output.set(ephemeralKeyPair.publicKey);
 
   const nonce = _generateNonce(ephemeralKeyPair.publicKey, _pk);
   const boxed = nacl.box(messageToEncrypt, nonce, _pk, ephemeralKeyPair.secretKey);
 
-	output.set(boxed, ephemeralKeyPair.publicKey.length);
+  output.set(boxed, ephemeralKeyPair.publicKey.length);
   return nacl.util.encodeBase64(output);
 }
 
@@ -72,7 +72,7 @@ export function decrypt(cipherText) {
   const nonce = _generateNonce(originalEphemeralPublicKey, _pk);
 
   const boxData = input.subarray(nacl.box.publicKeyLength);
-	return nacl.util.encodeUTF8(nacl.box.open(boxData, nonce, originalEphemeralPublicKey, _sk));
+  return nacl.util.encodeUTF8(nacl.box.open(boxData, nonce, originalEphemeralPublicKey, _sk));
 }
 
 export function getUsername() {
