@@ -17,7 +17,7 @@ test('creates keypairs from username and password', async () => {
 
 test('encrypt and decrypt a message', () => {
   expect.assertions(2);
-  account.setKeyPair('6FUygceUHlKzGu/5ir4FNkmAtUF07uNeAAdp9+5hcy4=',
+  account._setKeyPair('6FUygceUHlKzGu/5ir4FNkmAtUF07uNeAAdp9+5hcy4=',
                      'm4jBZuDiCgcCz94VIWHmeVC9IsXOIavniA2pqeq5Gg0=');
   let encryptedMessage = account.encrypt('sómething with ñ and ü\n!_¡?\'{[^]}}à');
   expect(typeof encryptedMessage).toBe('string');
