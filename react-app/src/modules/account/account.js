@@ -52,16 +52,14 @@ export function bytes() {
 
 export function encrypt(plainText) {
   const messageToEncrypt = nacl.util.decodeUTF8(plainText);
-  let output =
-    new Uint8Array(nacl.box.publicKeyLength + nacl.box.overheadLength + messageToEncrypt.length);
-
   const ephemeralKeyPair = nacl.box.keyPair();
-  output.set(ephemeralKeyPair.publicKey);
-
   const nonce = _generateNonce(ephemeralKeyPair.publicKey, _pk);
   const boxed = nacl.box(messageToEncrypt, nonce, _pk, ephemeralKeyPair.secretKey);
 
-  output.set(boxed, ephemeralKeyPair.publicKey.length);
+  let output = new Uint8Array(nacl.box.publicKeyLength + boxed.length);
+  output.set(ephemeralKeyPair.publicKey);
+  output.set(boxed, nacl.box.publicKeyLength);
+
   return nacl.util.encodeBase64(output);
 }
 
