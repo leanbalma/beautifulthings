@@ -25,19 +25,25 @@ function _generateNonce(publicKeyA, publicKeyB) {
 
 export function constructor(username, password) {
   return new Promise(resolve => {
-    scrypt(sha256(nacl.util.decodeUTF8(password)), sha256(nacl.util.decodeUTF8(username)), {
+    const hashedPassword = sha256(nacl.util.decodeUTF8(password));
+    const salt = sha256(nacl.util.decodeUTF8(username));
+    const options = {
       N: 1 << 20,
       r: 8,
       p: 1,
       dkLen: 32,
       encoding: 'binary'
-    }, function(derivedKey) {
+    };
+
+    const callback = (derivedKey) => {
       const keyPair = nacl.box.keyPair.fromSecretKey(derivedKey);
       _username = username;
       _pk = keyPair.publicKey;
       _sk = keyPair.secretKey;
       resolve(null);
-    });
+    };
+
+    scrypt(hashedPassword, salt, options, callback);
   });
 }
 
@@ -54,11 +60,11 @@ export function encrypt(plainText) {
   const messageToEncrypt = nacl.util.decodeUTF8(plainText);
   const ephemeralKeyPair = nacl.box.keyPair();
   const nonce = _generateNonce(ephemeralKeyPair.publicKey, _pk);
-  const boxed = nacl.box(messageToEncrypt, nonce, _pk, ephemeralKeyPair.secretKey);
+  const cipherText = nacl.box(messageToEncrypt, nonce, _pk, ephemeralKeyPair.secretKey);
 
-  let output = new Uint8Array(nacl.box.publicKeyLength + boxed.length);
+  let output = new Uint8Array(nacl.box.publicKeyLength + cipherText.length);
   output.set(ephemeralKeyPair.publicKey);
-  output.set(boxed, nacl.box.publicKeyLength);
+  output.set(cipherText, nacl.box.publicKeyLength);
 
   return nacl.util.encodeBase64(output);
 }
@@ -68,9 +74,10 @@ export function decrypt(cipherText) {
   const originalEphemeralPublicKey = input.subarray(0, nacl.box.publicKeyLength);
 
   const nonce = _generateNonce(originalEphemeralPublicKey, _pk);
+  const encryptedMessage = input.subarray(nacl.box.publicKeyLength);
+  const decryptedMessage = nacl.box.open(encryptedMessage, nonce, originalEphemeralPublicKey, _sk);
 
-  const boxData = input.subarray(nacl.box.publicKeyLength);
-  return nacl.util.encodeUTF8(nacl.box.open(boxData, nonce, originalEphemeralPublicKey, _sk));
+  return nacl.util.encodeUTF8(decryptedMessage);
 }
 
 export function getUsername() {
