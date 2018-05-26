@@ -1,4 +1,4 @@
-import { account, ErrorAccountAlreadyInitialized, ErrorInvalidOffsetValue } from './Account.js';
+import { account, ErrorAccountAlreadyInitialized, ErrorAccountNotInitialized, ErrorInvalidOffsetValue, ErrorAuthenticationFail } from './Account.js';
 import naclUtils from 'tweetnacl-util';
 
 const mockUserData = {
@@ -12,13 +12,13 @@ const mockUserData = {
   mockUserData.expectedTz = `GMT+${mockUserData.offset}` :
   mockUserData.expectedTz = `GMT${mockUserData.offset}`;
 
-test('initializes unsuccessfully the account with invalid offset', () => {
+test('fail when initializes with invalid data', () => {
   expect.assertions(1);
   expect(() => account.initialize(mockUserData.username, mockUserData.password, Infinity))
     .toThrow(ErrorInvalidOffsetValue);
 });
 
-test('initializes successfully the account instance with valid data', () => {
+test('success when initializes with valid data', () => {
   expect.assertions(6);
   expect(account.initialize(mockUserData.username, mockUserData.password, mockUserData.offset))
     .toBeUndefined();
@@ -34,21 +34,28 @@ test('initializes successfully the account instance with valid data', () => {
   expect(generatedSecretKey).toBe(mockUserData.expectedSecretKey);
 });
 
-test('initializes unsuccessfully the account a second time', () => {
+test('fail when initializes an initialized account', () => {
   expect.assertions(1);
   expect(() => account.initialize(mockUserData.username, mockUserData.password, mockUserData.offset))
     .toThrow(ErrorAccountAlreadyInitialized);
 });
 
-test('encrypts and decrypts a message', () => {
+test('success when encrypts and decrypts a message', () => {
   expect.assertions(2);
-  account._pk = naclUtils.decodeBase64(mockUserData.expectedPublicKey);
-  account._sk = naclUtils.decodeBase64(mockUserData.expectedSecretKey);
-
   const plainText = 'sómething with ñ and ü\n!_¡?\'{[^]}}à';
   const encryptedMessage = account.encrypt(plainText);
   const decryptedMessage = account.decrypt(encryptedMessage);
 
   expect(typeof encryptedMessage).toBe('string');
   expect(decryptedMessage).toBe(plainText);
+});
+
+test('fail when encrypts and decrypts a modified ciphertext', () => {
+  expect.assertions(2);
+  const plainText = 'sómething with ñ and ü\n!_¡?\'{[^]}}à';
+  const encryptedMessage = account.encrypt(plainText);
+  expect(typeof encryptedMessage).toBe('string');
+
+  const modifiedEncryptedMessage = `axs${encryptedMessage.substring(3)}`;
+  expect(() => account.decrypt(modifiedEncryptedMessage)).toThrow(ErrorAuthenticationFail);
 });

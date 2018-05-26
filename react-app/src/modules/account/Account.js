@@ -5,8 +5,8 @@ import blake from 'blakejs';
 
 nacl.util = require('tweetnacl-util');
 
-export const OFFSET_MIN = -12;
-export const OFFSET_MAX = 14;
+const OFFSET_MIN = -12;
+const OFFSET_MAX = 14;
 
 class Account {
   constructor() {
@@ -40,7 +40,7 @@ class Account {
   }
 
   bytes() {
-    if (this._initialized) throw new ErrorAccountAlreadyInitialized();
+    if (!this._initialized) throw new ErrorAccountNotInitialized();
 
     return JSON.stringify({
       username: this._username,
@@ -58,7 +58,7 @@ class Account {
   }
 
   encrypt(plainText) {
-    if (this._initialized) throw new ErrorAccountAlreadyInitialized();
+    if (!this._initialized) throw new ErrorAccountNotInitialized();
 
     const messageToEncrypt = nacl.util.decodeUTF8(plainText);
     const ephemeralKeyPair = nacl.box.keyPair();
@@ -74,8 +74,8 @@ class Account {
   }
 
   decrypt(cipherText) {
-    if (this._initialized) throw new ErrorAccountAlreadyInitialized();
-    
+    if (!this._initialized) throw new ErrorAccountNotInitialized();
+
     const input = nacl.util.decodeBase64(cipherText);
     const originalEphemeralPublicKey = input.subarray(0, nacl.box.publicKeyLength);
 
@@ -83,6 +83,8 @@ class Account {
     const encryptedMessage = input.subarray(nacl.box.publicKeyLength);
     const decryptedMessage
       = nacl.box.open(encryptedMessage, nonce, originalEphemeralPublicKey, this._sk);
+
+    if (decryptedMessage === null) throw new ErrorAuthenticationFail();
 
     return nacl.util.encodeUTF8(decryptedMessage);
   }
@@ -105,6 +107,14 @@ class Account {
   }
 }
 
-export let account = new Account();
-export class ErrorAccountAlreadyInitialized extends Error {}
-export class ErrorInvalidOffsetValue extends Error {}
+let account = new Account();
+
+class ErrorAccountAlreadyInitialized extends Error {}
+class ErrorAccountNotInitialized extends Error {}
+class ErrorInvalidOffsetValue extends Error {}
+class ErrorAuthenticationFail extends Error {}
+
+export {
+  OFFSET_MIN, OFFSET_MAX, account, ErrorAccountAlreadyInitialized, ErrorAccountNotInitialized,
+  ErrorInvalidOffsetValue, ErrorAuthenticationFail
+}
