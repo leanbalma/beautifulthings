@@ -1,0 +1,14 @@
+label {
+  font-size: 14px;
+}
+
+input.password {
+  padding-right: 25px;
+}
+
+.show-hide-button {
+  color: #777;
+  font-size: 12px;
+  position: relative;
+  margin-left: -20px;
+}
