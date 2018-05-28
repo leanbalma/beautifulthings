@@ -9,6 +9,7 @@ export default class Logo extends Component {
       <img
         className={this.props.size}
         src={PlaceholderLogo}
+        alt=""
       />
     );
   }
