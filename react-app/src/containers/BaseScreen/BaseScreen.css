@@ -1,0 +1,21 @@
+div.BaseScreen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+div.header {
+  width: 100vw;
+}
+
+div.main {
+  flex-grow: 1;
+  overflow-y: auto;
+  text-align: center;
+}
+
+div.footer {
+  width: 100vw;
+  text-align: center;
+  background-color: azure;
+}
