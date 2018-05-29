@@ -5,19 +5,8 @@ import blake from 'blakejs';
 
 nacl.util = require('tweetnacl-util');
 
-const OFFSET_MIN = -12;
-const OFFSET_MAX = 14;
-
 class Account {
-  constructor() {
-    this._initialized = false;
-  }
-
-  initialize(username, password, offset) {
-    if (this._initialized) throw new ErrorAccountAlreadyInitialized();
-
-    this.offset = offset;
-
+  constructor(username, password) {
     const hashedPassword = sha256(nacl.util.decodeUTF8(password));
     const salt = sha256(nacl.util.decodeUTF8(username));
     const options = {
@@ -30,23 +19,25 @@ class Account {
 
     const callback = (derivedKey) => {
       const keyPair = nacl.box.keyPair.fromSecretKey(derivedKey);
+
+      const systemTzOffsetInMinutes = -(new Date()).getTimezoneOffset();
+      const systemTzOffsetInHours = Math.floor(systemTzOffsetInMinutes / 60);
+
       this._username = username;
       this._pk = keyPair.publicKey;
       this._sk = keyPair.secretKey;
-      this._initialized = true;
+      this.offset = systemTzOffsetInHours;
     };
 
     scrypt(hashedPassword, salt, options, callback);
   }
 
   bytes() {
-    if (!this._initialized) throw new ErrorAccountNotInitialized();
-
     return JSON.stringify({
       username: this._username,
       pk: this._pk,
-      tz: this._tz,
-      offset: this._offset
+      tz: this.tz,
+      offset: this.offset
     });
   }
 
@@ -58,8 +49,6 @@ class Account {
   }
 
   encrypt(plainText) {
-    if (!this._initialized) throw new ErrorAccountNotInitialized();
-
     const messageToEncrypt = nacl.util.decodeUTF8(plainText);
     const ephemeralKeyPair = nacl.box.keyPair();
     const nonce = this._generateNonce(ephemeralKeyPair.publicKey, this._pk);
@@ -74,8 +63,6 @@ class Account {
   }
 
   decrypt(cipherText) {
-    if (!this._initialized) throw new ErrorAccountNotInitialized();
-
     const input = nacl.util.decodeBase64(cipherText);
     const originalEphemeralPublicKey = input.subarray(0, nacl.box.publicKeyLength);
 
@@ -94,10 +81,6 @@ class Account {
   }
 
   set offset(offset) {
-    if (offset !== parseInt(offset, 10) || offset < OFFSET_MIN || offset > OFFSET_MAX) {
-      throw new ErrorInvalidOffsetValue();
-    }
-
     this._offset = offset;
     (offset >= 0) ? this._tz = `GMT+${offset}` : this._tz = `GMT${offset}`;
   }
@@ -107,14 +90,7 @@ class Account {
   }
 }
 
-let account = new Account();
-
-class ErrorAccountAlreadyInitialized extends Error {}
-class ErrorAccountNotInitialized extends Error {}
-class ErrorInvalidOffsetValue extends Error {}
 class ErrorAuthenticationFail extends Error {}
 
-export {
-  OFFSET_MIN, OFFSET_MAX, account, ErrorAccountAlreadyInitialized, ErrorAccountNotInitialized,
-  ErrorInvalidOffsetValue, ErrorAuthenticationFail
-}
+export default Account;
+export { ErrorAuthenticationFail }

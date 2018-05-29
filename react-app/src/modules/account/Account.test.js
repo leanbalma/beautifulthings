@@ -1,43 +1,34 @@
-import { account, ErrorAccountAlreadyInitialized, ErrorAccountNotInitialized, ErrorInvalidOffsetValue, ErrorAuthenticationFail } from './Account.js';
+import Account, { ErrorAuthenticationFail } from './Account.js';
 import naclUtils from 'tweetnacl-util';
+
+let account;
 
 const mockUserData = {
   username:           '$/()RUFJ)wuwe84349',
   password:           'dnefu384(/·$873hf7g',
   expectedPublicKey:  '6FUygceUHlKzGu/5ir4FNkmAtUF07uNeAAdp9+5hcy4=',
-  expectedSecretKey:  'm4jBZuDiCgcCz94VIWHmeVC9IsXOIavniA2pqeq5Gg0=',
-  offset:             -3
+  expectedSecretKey:  'm4jBZuDiCgcCz94VIWHmeVC9IsXOIavniA2pqeq5Gg0='
 };
-(mockUserData.offset >= 0) ?
-  mockUserData.expectedTz = `GMT+${mockUserData.offset}` :
-  mockUserData.expectedTz = `GMT${mockUserData.offset}`;
 
-test('fail when initializes with invalid data', () => {
-  expect.assertions(1);
-  expect(() => account.initialize(mockUserData.username, mockUserData.password, Infinity))
-    .toThrow(ErrorInvalidOffsetValue);
-});
-
-test('success when initializes with valid data', () => {
-  expect.assertions(6);
-  expect(account.initialize(mockUserData.username, mockUserData.password, mockUserData.offset))
-    .toBeUndefined();
+test('match between generated key pairs with expected ones', () => {
+  expect.assertions(5);
+  account = new Account(mockUserData.username, mockUserData.password);
 
   expect(account._username).toBe(mockUserData.username);
-  expect(account.offset).toBe(mockUserData.offset);
-  expect(account.tz).toBe(mockUserData.expectedTz);
+
+  const systemTzOffsetInMinutes = -(new Date()).getTimezoneOffset();
+  const systemTzOffsetInHours = Math.floor(systemTzOffsetInMinutes / 60);
+  const systemTz = (systemTzOffsetInHours >= 0) ?
+    `GMT+${systemTzOffsetInHours}` :
+    `GMT${systemTzOffsetInHours}`;
+  expect(account.offset).toBe(systemTzOffsetInHours);
+  expect(account.tz).toBe(systemTz);
 
   const generatedPublicKey = naclUtils.encodeBase64(account._pk);
   expect(generatedPublicKey).toBe(mockUserData.expectedPublicKey);
 
   const generatedSecretKey = naclUtils.encodeBase64(account._sk);
   expect(generatedSecretKey).toBe(mockUserData.expectedSecretKey);
-});
-
-test('fail when initializes an initialized account', () => {
-  expect.assertions(1);
-  expect(() => account.initialize(mockUserData.username, mockUserData.password, mockUserData.offset))
-    .toThrow(ErrorAccountAlreadyInitialized);
 });
 
 test('success when encrypts and decrypts a message', () => {
