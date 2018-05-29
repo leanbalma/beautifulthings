@@ -21,8 +21,8 @@ test('match between generated key pairs with expected ones', () => {
   const systemTz = (systemTzOffsetInHours >= 0) ?
     `GMT+${systemTzOffsetInHours}` :
     `GMT${systemTzOffsetInHours}`;
-  expect(account.offset).toBe(systemTzOffsetInHours);
-  expect(account.tz).toBe(systemTz);
+  expect(account._offset).toBe(systemTzOffsetInHours);
+  expect(account._tz).toBe(systemTz);
 
   const generatedPublicKey = naclUtils.encodeBase64(account._pk);
   expect(generatedPublicKey).toBe(mockUserData.expectedPublicKey);

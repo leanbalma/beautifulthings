@@ -26,7 +26,10 @@ class Account {
       this._username = username;
       this._pk = keyPair.publicKey;
       this._sk = keyPair.secretKey;
-      this.offset = systemTzOffsetInHours;
+      this._offset = systemTzOffsetInHours;
+      this._tz = (systemTzOffsetInHours >= 0) ?
+        `GMT+${systemTzOffsetInHours}` :
+        `GMT${systemTzOffsetInHours}`;
     };
 
     scrypt(hashedPassword, salt, options, callback);
@@ -36,8 +39,8 @@ class Account {
     return JSON.stringify({
       username: this._username,
       pk: this._pk,
-      tz: this.tz,
-      offset: this.offset
+      tz: this._tz,
+      offset: this._offset
     });
   }
 
@@ -74,19 +77,6 @@ class Account {
     if (decryptedMessage === null) throw new ErrorAuthenticationFail();
 
     return nacl.util.encodeUTF8(decryptedMessage);
-  }
-
-  get offset() {
-    return this._offset;
-  }
-
-  set offset(offset) {
-    this._offset = offset;
-    (offset >= 0) ? this._tz = `GMT+${offset}` : this._tz = `GMT${offset}`;
-  }
-
-  get tz() {
-    return this._tz;
   }
 }
 
