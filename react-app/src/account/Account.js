@@ -5,6 +5,8 @@ import blake from 'blakejs';
 
 nacl.util = require('tweetnacl-util');
 
+class ErrorAuthenticationFail extends Error {}
+
 class Account {
   constructor(username, password) {
     const hashedPassword = sha256(nacl.util.decodeUTF8(password));
@@ -79,8 +81,6 @@ class Account {
     return nacl.util.encodeUTF8(decryptedMessage);
   }
 }
-
-class ErrorAuthenticationFail extends Error {}
 
 export default Account;
 export { ErrorAuthenticationFail }
