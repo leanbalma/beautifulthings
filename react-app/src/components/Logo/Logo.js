@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import PlaceholderLogo from './PlaceholderLogo.svg';
@@ -7,7 +7,7 @@ import './Logo.css';
 const SMALL = 'small';
 const BIG = 'big';
 
-export default class Logo extends Component {
+export default class Logo extends PureComponent {
   static propTypes = {
     /**
      * The size for the logo. Possible values: 'small' or 'big'
