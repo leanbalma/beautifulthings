@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import Account, { ErrorAuthenticationFail } from './Account.js';
+import Account, { ErrorAuthenticationFail } from './';
 import naclUtils from 'tweetnacl-util';
 
 let account;
