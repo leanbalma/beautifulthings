@@ -1,8 +1,5 @@
 .StartScreen {
-  text-align: center;
-}
-
-.col {
   display: flex;
+  text-align: center;
   flex-direction: column;
 }
