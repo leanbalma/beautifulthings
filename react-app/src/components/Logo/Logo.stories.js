@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs, selectV2 } from '@storybook/addon-knobs/react';
 
-import Logo from './Logo';
+import Logo from './';
 
 const stories = storiesOf('Logo', module);
 stories.addDecorator(withKnobs);
