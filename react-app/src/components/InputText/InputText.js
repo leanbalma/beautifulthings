@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/fontawesome-free-solid';
@@ -8,7 +8,7 @@ import './InputText.css';
 const TEXT = 'text';
 const PASSWORD = 'password';
 
-export default class InputText extends Component {
+export default class InputText extends PureComponent {
   static propTypes = {
     /**
      * The type of the input. Possible values: 'text' or 'password'.
