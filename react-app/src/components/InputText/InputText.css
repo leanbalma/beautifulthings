@@ -11,4 +11,5 @@ input.password {
   font-size: 12px;
   position: relative;
   margin-left: -20px;
+  cursor: pointer;
 }
