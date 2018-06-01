@@ -2,6 +2,7 @@ import scrypt from 'scrypt-async';
 import nacl from 'tweetnacl';
 import sha256 from 'fast-sha256';
 import blake from 'blakejs';
+import { getTzFromOffset } from 'utils/timezone';
 
 nacl.util = require('tweetnacl-util');
 
@@ -29,9 +30,7 @@ class Account {
       this._pk = keyPair.publicKey;
       this._sk = keyPair.secretKey;
       this._offset = systemTzOffsetInHours;
-      this._tz = (systemTzOffsetInHours >= 0) ?
-        `GMT+${systemTzOffsetInHours}` :
-        `GMT${systemTzOffsetInHours}`;
+      this._tz = getTzFromOffset(this._offset);
     };
 
     scrypt(hashedPassword, salt, options, callback);

@@ -12,18 +12,10 @@ const mockUserData = {
 };
 
 test('match between generated key pairs with expected ones', () => {
-  expect.assertions(5);
+  expect.assertions(3);
   account = new Account(mockUserData.username, mockUserData.password);
 
   expect(account._username).toBe(mockUserData.username);
-
-  const systemTzOffsetInMinutes = -(new Date()).getTimezoneOffset();
-  const systemTzOffsetInHours = Math.floor(systemTzOffsetInMinutes / 60);
-  const systemTz = (systemTzOffsetInHours >= 0) ?
-    `GMT+${systemTzOffsetInHours}` :
-    `GMT${systemTzOffsetInHours}`;
-  expect(account._offset).toBe(systemTzOffsetInHours);
-  expect(account._tz).toBe(systemTz);
 
   const generatedPublicKey = naclUtils.encodeBase64(account._pk);
   expect(generatedPublicKey).toBe(mockUserData.expectedPublicKey);
