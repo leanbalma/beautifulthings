@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import './StartScreen.css';
 
@@ -6,7 +6,7 @@ import Logo from 'components/Logo';
 import Button from 'components/Button';
 import InputText from 'components/InputText';
 
-export default class StartScreen extends Component {
+export default class StartScreen extends PureComponent {
   render() {
     return (
       <div className="StartScreen">
