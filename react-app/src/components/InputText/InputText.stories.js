@@ -1,23 +1,29 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import { withKnobs, text } from '@storybook/addon-knobs/react';
 
 import InputText from './InputText';
 
-storiesOf('InputText', module)
-  .add('Input type text', () => (
-    <InputText
-      type="text"
-      name="username"
-      label="Username: "
-      placeholder="Username"
-      onEnter={action('input change')}
-    />))
-  .add('Input type password', () => (
-    <InputText
-      type="password"
-      name="password"
-      label="Password: "
-      placeholder="Password"
-      onEnter={action('input change')}
-    />))
+const stories = storiesOf('InputText', module);
+stories.addDecorator(withKnobs);
+
+stories.add('Input type text', () => (
+  <InputText
+    type="text"
+    label={text('Label', 'Username')}
+    placeholder={text('Placeholder', 'Username')}
+    onEnter={action('enter pressed')}
+    onChange={action('input change')}
+  />
+));
+
+stories.add('Input type password', () => (
+  <InputText
+    type="password"
+    label="Password"
+    placeholder={text('Placeholder', 'Password')}
+    onEnter={action('enter pressed')}
+    onChange={action('input change')}
+  />
+));
