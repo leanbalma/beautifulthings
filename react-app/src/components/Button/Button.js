@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-export default class Button extends Component {
+export default class Button extends PureComponent {
   static propTypes = {
     /**
      * The label or element the button will show.
