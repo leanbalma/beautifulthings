@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/fontawesome-free-solid';
 
-import './index.css';
+import styles from './index.css';
 
 export default class InputText extends PureComponent {
   static TEXT = 'text';
@@ -57,7 +57,7 @@ export default class InputText extends PureComponent {
 
     return (
       <FontAwesomeIcon
-        className="show-hide-button"
+        className={styles.showHideButton}
         icon={(this.state.isPasswordVisible) ? faEyeSlash : faEye}
         onClick={this._togglePasswordVisibility}
       />
@@ -66,14 +66,14 @@ export default class InputText extends PureComponent {
 
   render() {
     const icon = this._getInputIcon();
-    const label = (this.props.label !== '') ? <label>{this.props.label}</label> : null;
+    const label = (this.props.label !== '') ? <label className={styles.label}>{this.props.label}</label> : null;
     const placeholder = (this.props.placeholder !== '') ? this.props.placeholder : null;
 
     return (
       <div>
         {label}
         <input
-          className={this.props.type}
+          className={(this.props.type === InputText.PASSWORD) ? styles.password : null}
           type={(this.props.type === InputText.TEXT) ? InputText.TEXT :
                 (this.state.isPasswordVisible) ? InputText.TEXT : InputText.PASSWORD}
           placeholder={placeholder}

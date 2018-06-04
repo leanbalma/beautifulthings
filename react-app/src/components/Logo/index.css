@@ -1,7 +1,6 @@
-.small {
+:local(.small) {
   height: 25px;
 }
-
-.big {
+:local(.big) {
   height: 100px;
 }

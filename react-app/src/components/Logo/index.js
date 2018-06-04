@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import PlaceholderLogo from './PlaceholderLogo.svg';
-import './index.css';
+import styles from './index.css';
 
 export default class Logo extends PureComponent {
   static SMALL = 'small';
@@ -18,7 +18,7 @@ export default class Logo extends PureComponent {
   render() {
     return (
       <img
-        className={this.props.size}
+        className={(this.props.size === Logo.SMALL) ? styles.small : styles.big}
         src={PlaceholderLogo}
         alt=""
       />

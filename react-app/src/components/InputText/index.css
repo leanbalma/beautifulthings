@@ -1,12 +1,10 @@
-label {
+:local(.label) {
   font-size: 14px;
 }
-
-input.password {
+:local(.password) {
   padding-right: 25px;
 }
-
-.show-hide-button {
+:local(.showHideButton) {
   color: #777;
   font-size: 12px;
   position: relative;
