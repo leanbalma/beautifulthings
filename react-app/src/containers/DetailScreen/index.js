@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import BaseScreen from 'containers/BaseScreen/BaseScreen';
-import Header     from 'components/Header/Header';
-import ActionIcon from 'components/ActionIcon/ActionIcon';
-import Button     from 'components/Button/Button';
+import BaseScreen from 'containers/BaseScreen';
+import Header     from 'components/Header';
+import ActionIcon from 'components/ActionIcon';
+import Button     from 'components/Button';
 
 export default class DetailScreen extends Component {
   render() {

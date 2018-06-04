@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import './BaseScreen.css';
+import './index.css';
 
 export default class BaseScreen extends Component {
   render() {
