@@ -2,7 +2,7 @@
 import Account, { ErrorAuthenticationFail } from './';
 import naclUtils from 'tweetnacl-util';
 
-let account;
+let account, keyPair;
 
 const mockUserData = {
   username:           '$/()RUFJ)wuwe84349',
@@ -11,21 +11,21 @@ const mockUserData = {
   expectedSecretKey:  'm4jBZuDiCgcCz94VIWHmeVC9IsXOIavniA2pqeq5Gg0='
 };
 
-test('match between generated key pairs with expected ones', () => {
-  expect.assertions(3);
-  account = new Account(mockUserData.username, mockUserData.password);
+test('match generated keypair with expected one', async () => {
+  expect.assertions(2);
+  keyPair = await Account.generateKeyPair(mockUserData.username, mockUserData.password);
 
-  expect(account._username).toBe(mockUserData.username);
-
-  const generatedPublicKey = naclUtils.encodeBase64(account._pk);
+  const generatedPublicKey = naclUtils.encodeBase64(keyPair.publicKey);
   expect(generatedPublicKey).toBe(mockUserData.expectedPublicKey);
 
-  const generatedSecretKey = naclUtils.encodeBase64(account._sk);
+  const generatedSecretKey = naclUtils.encodeBase64(keyPair.secretKey);
   expect(generatedSecretKey).toBe(mockUserData.expectedSecretKey);
 });
 
 test('success when encrypts and decrypts a message', () => {
   expect.assertions(2);
+  account = new Account(mockUserData.username, keyPair);
+
   const plainText = 'sómething with ñ and ü\n!_¡?\'{[^]}}à';
   const encryptedMessage = account.encrypt(plainText);
   const decryptedMessage = account.decrypt(encryptedMessage);
