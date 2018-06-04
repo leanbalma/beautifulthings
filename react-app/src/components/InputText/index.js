@@ -45,11 +45,11 @@ export default class InputText extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = { type: this.props.type };
+    this.state = { isPasswordVisible: false };
   }
 
   _togglePasswordVisibility = () => {
-    this.setState({ type: (this.state.type === TEXT) ? PASSWORD : TEXT });
+    this.setState({ isPasswordVisible: !this.state.isPasswordVisible });
   }
 
   _getInputIcon = () => {
@@ -58,7 +58,7 @@ export default class InputText extends PureComponent {
     return (
       <FontAwesomeIcon
         className="show-hide-button"
-        icon={(this.state.type === TEXT) ? faEyeSlash : faEye}
+        icon={(this.state.isPasswordVisible) ? faEyeSlash : faEye}
         onClick={this._togglePasswordVisibility}
       />
     )
@@ -74,7 +74,7 @@ export default class InputText extends PureComponent {
         {label}
         <input
           className={this.props.type}
-          type={this.state.type}
+          type={(this.props.type === TEXT) ? TEXT : (this.state.isPasswordVisible) ? TEXT : PASSWORD}
           placeholder={placeholder}
           onKeyPress={event => (event.key === 'Enter') ? this.props.onEnter() : null}
           onChange={event => this.props.onChange(event.target.value)}
