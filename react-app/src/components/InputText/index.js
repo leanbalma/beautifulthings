@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/fontawesome-free-solid';
 
-import './InputText.css';
+import './index.css';
 
 export default class InputText extends PureComponent {
   static TEXT = 'text';

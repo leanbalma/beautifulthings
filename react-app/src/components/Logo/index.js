@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import PlaceholderLogo from './PlaceholderLogo.svg';
-import './Logo.css';
+import './index.css';
 
 export default class Logo extends PureComponent {
   static SMALL = 'small';
