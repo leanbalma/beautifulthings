@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import './index.css';
+import styles from './index.css';
 
 export default class BaseScreen extends PureComponent {
   static propTypes = {
@@ -25,14 +25,14 @@ export default class BaseScreen extends PureComponent {
 
   render() {
     return (
-      <div className="BaseScreen">
-        <div className="header">
+      <div className={styles.container}>
+        <div>
           {this.props.header}
         </div>
-        <div className="main">
+        <div className={styles.main}>
           {this.props.main}
         </div>
-        <div className="footer">
+        <div>
           {this.props.footer}
         </div>
       </div>
