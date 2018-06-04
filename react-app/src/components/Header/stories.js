@@ -2,8 +2,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import Header from './Header';
-import ActionIcon from 'components/ActionIcon/ActionIcon';
+import Header from './';
+import ActionIcon from 'components/ActionIcon';
 
 storiesOf('Header', module)
   .add('Header with no side icons', () => (

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-import Logo from 'components/Logo/Logo';
-import './Header.css';
+import Logo from 'components/Logo';
+import './index.css';
 
 export default class Header extends Component {
   render() {
