@@ -10,7 +10,7 @@ stories.addDecorator(withKnobs);
 
 stories.add('Input type text', () => (
   <InputText
-    type="text"
+    type={InputText.TEXT}
     label={text('Label', 'Username')}
     placeholder={text('Placeholder', 'Username')}
     onEnter={action('enter pressed')}
@@ -20,7 +20,7 @@ stories.add('Input type text', () => (
 
 stories.add('Input type password', () => (
   <InputText
-    type="password"
+    type={InputText.PASSWORD}
     label="Password"
     placeholder={text('Placeholder', 'Password')}
     onEnter={action('enter pressed')}

@@ -5,15 +5,15 @@ import { faEye, faEyeSlash } from '@fortawesome/fontawesome-free-solid';
 
 import './InputText.css';
 
-const TEXT = 'text';
-const PASSWORD = 'password';
-
 export default class InputText extends PureComponent {
+  static TEXT = 'text';
+  static PASSWORD = 'password';
+
   static propTypes = {
     /**
      * The type of the input. Possible values: 'text' or 'password'.
      */
-    type: PropTypes.oneOf([TEXT, PASSWORD]).isRequired,
+    type: PropTypes.oneOf([InputText.TEXT, InputText.PASSWORD]).isRequired,
 
     /**
      * The label the input will display.
@@ -53,7 +53,7 @@ export default class InputText extends PureComponent {
   }
 
   _getInputIcon = () => {
-    if (this.props.type === TEXT) return null;
+    if (this.props.type === InputText.TEXT) return null;
 
     return (
       <FontAwesomeIcon
@@ -74,7 +74,8 @@ export default class InputText extends PureComponent {
         {label}
         <input
           className={this.props.type}
-          type={(this.props.type === TEXT) ? TEXT : (this.state.isPasswordVisible) ? TEXT : PASSWORD}
+          type={(this.props.type === InputText.TEXT) ? InputText.TEXT :
+                (this.state.isPasswordVisible) ? InputText.TEXT : InputText.PASSWORD}
           placeholder={placeholder}
           onKeyPress={event => (event.key === 'Enter') ? this.props.onEnter() : null}
           onChange={event => this.props.onChange(event.target.value)}
