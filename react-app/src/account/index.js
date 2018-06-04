@@ -37,7 +37,7 @@ class Account {
     this._tz = getTzFromOffset(this._offset);
   }
 
-  bytes() {
+  toString() {
     return JSON.stringify({
       username: this._username,
       pk: this._pk,
