@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import Logo from 'components/Logo';
 import styles from './index.css';
 
-export default class Header extends Component {
+export default class Header extends PureComponent {
   static propTypes = {
     /**
      * The element (an ActionIcon) that this element will show in the left.

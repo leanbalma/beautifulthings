@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faTrashAlt, faCheck } from '@fortawesome/fontawesome-free-solid';
 
-export default class ActionIcon extends Component {
+export default class ActionIcon extends PureComponent {
   static BACK = 'back';
   static REMOVE = 'remove';
   static APPLY = 'apply';
