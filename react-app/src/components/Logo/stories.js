@@ -8,12 +8,10 @@ const stories = storiesOf('Logo', module);
 stories.addDecorator(withKnobs);
 
 const availableSizes = {
-  small: 'small',
-  big: 'big',
+  small: Logo.SMALL,
+  big: Logo.BIG,
 }
 
-const defaultSize = availableSizes.small;
-
 stories.add('Logo', () => (
-  <Logo size={selectV2('Size', availableSizes, defaultSize)} />
+  <Logo size={selectV2('Size', availableSizes, availableSizes.small)} />
 ));
