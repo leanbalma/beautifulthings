@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import Logo from 'components/Logo';
-import './index.css';
+import styles from './index.css';
 
 export default class Header extends Component {
   static propTypes = {
@@ -24,14 +24,14 @@ export default class Header extends Component {
 
   render() {
     return (
-      <div className="Header">
-        <div className="left">
+      <div className={styles.container}>
+        <div className={styles.left}>
           {this.props.left}
         </div>
-        <div className="center">
+        <div className={styles.center}>
           <Logo size={Logo.SMALL} />
         </div>
-        <div className="right">
+        <div className={styles.right}>
           {this.props.right}
         </div>
       </div>
