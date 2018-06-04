@@ -1,16 +1,29 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import BaseScreen from 'containers/BaseScreen';
 import Header     from 'components/Header';
 import ActionIcon from 'components/ActionIcon';
 import Button     from 'components/Button';
 
-export default class DetailScreen extends Component {
+export default class DetailScreen extends PureComponent {
+  static propTypes = {
+    /**
+     * The entry date to show.
+     */
+    date: PropTypes.string.isRequired,
+
+    /**
+     * The entry text to show.
+     */
+    text: PropTypes.string.isRequired,
+  };
+
   render() {
     const header = (
       <Header
-        left={<ActionIcon icon="back" />}
-        right={<ActionIcon icon="remove" />}
+        left={<ActionIcon icon={ActionIcon.BACK} />}
+        right={<ActionIcon icon={ActionIcon.REMOVE} />}
       />
     );
 
@@ -28,13 +41,11 @@ export default class DetailScreen extends Component {
     const footer = (<Button>Edit</Button>);
 
     return (
-      <div>
-        <BaseScreen
-          header={header}
-          main={main}
-          footer={footer}
-        />
-      </div>
+      <BaseScreen
+        header={header}
+        main={main}
+        footer={footer}
+      />
     );
   }
 }
