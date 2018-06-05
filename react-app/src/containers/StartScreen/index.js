@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 
-import styles from './index.css';
+import styles from './index.module.scss';
 
 import Logo from 'components/Logo';
 import Button from 'components/Button';
