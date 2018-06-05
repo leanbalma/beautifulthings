@@ -68,14 +68,14 @@ export default class InputText extends PureComponent {
     const icon = this._getInputIcon();
     const label = (this.props.label !== '') ? <label className={styles.label}>{this.props.label}</label> : null;
     const placeholder = (this.props.placeholder !== '') ? this.props.placeholder : null;
+    const inputType = (this.props.type === InputText.TEXT || this.state.isPasswordVisible) ? InputText.TEXT : InputText.PASSWORD;
 
     return (
       <div>
         {label}
         <input
           className={(this.props.type === InputText.PASSWORD) ? styles.password : null}
-          type={(this.props.type === InputText.TEXT) ? InputText.TEXT :
-                (this.state.isPasswordVisible) ? InputText.TEXT : InputText.PASSWORD}
+          type={inputType}
           placeholder={placeholder}
           onKeyPress={event => (event.key === 'Enter') ? this.props.onEnter() : null}
           onChange={event => this.props.onChange(event.target.value)}
