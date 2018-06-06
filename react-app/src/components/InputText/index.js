@@ -39,8 +39,6 @@ export default class InputText extends PureComponent {
   static defaultProps = {
     label: '',
     placeholder: '',
-    onEnter: () => {},
-    onChange: () => {},
   }
 
   constructor(props) {
@@ -48,10 +46,10 @@ export default class InputText extends PureComponent {
     this.state = { isPasswordVisible: false };
   }
 
-  _togglePasswordVisibility = () => {
-    this.setState({ isPasswordVisible: !this.state.isPasswordVisible });
-  }
+  _handleChange = event => (this.props.onChange) ? this.props.onChange(event.target.value) : null;
+  _handleKeyDown = event => (this.props.onEnter && event.key === 'Enter') ? this.props.onEnter() : null;
 
+  _togglePasswordVisibility = () => this.setState({ isPasswordVisible: !this.state.isPasswordVisible });
   _getInputIcon = () => {
     if (this.props.type === InputText.TEXT) return null;
 
@@ -77,8 +75,8 @@ export default class InputText extends PureComponent {
           className={(this.props.type === InputText.PASSWORD) ? styles.password : null}
           type={inputType}
           placeholder={placeholder}
-          onKeyPress={event => (event.key === 'Enter') ? this.props.onEnter() : null}
-          onChange={event => this.props.onChange(event.target.value)}
+          onKeyDown={this._handleKeyDown}
+          onChange={this._handleChange}
         />
         {icon}
       </div>

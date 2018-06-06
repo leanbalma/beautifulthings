@@ -22,16 +22,15 @@ export default class Button extends PureComponent {
     disabled: PropTypes.bool,
   };
 
-  static defaultProps = {
-    onClick: () => {},
-    disabled: false,
-  }
+  static defaultProps = { disabled: false }
+
+  _handleClick = event => (this.props.onClick) ? this.props.onClick(event) : null;
 
   render() {
     return (
       <button
         disabled={this.props.disabled}
-        onClick={event => this.props.onClick(event)}
+        onClick={this._handleClick}
       >
         {this.props.children}
       </button>
