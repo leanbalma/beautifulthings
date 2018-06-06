@@ -1,4 +1,4 @@
-:local(.container) {
+.container {
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -6,25 +6,25 @@
   background-color: azure;
 }
 
-:local(.element) {
+%element {
   flex-basis: 33vw;
   padding-top: 2px;
   padding-bottom: 2px;
 }
 
-:local(.left) {
-  composes: element;
+.left {
+  @extend %element;
   margin-left: 5px;
 }
 
-:local(.center) {
-  composes: element;
+.center {
+  @extend %element;
   flex-basis: 34vw;
   text-align: center;
 }
 
-:local(.right) {
-  composes: element;
+.right {
+  @extend %element;
   text-align: right;
   margin-right: 5px;
 }
