@@ -17,15 +17,45 @@ export default class DetailScreen extends PureComponent {
      * The entry text to show.
      */
     text: PropTypes.string.isRequired,
+
+    /**
+     * The function to call when back button is tapped
+     */
+    onBack: PropTypes.func.isRequired,
+
+    /**
+     * The function to call when remove button is tapped
+     */
+    onRemove: PropTypes.func.isRequired,
+
+    /**
+     * The function to call when edit button is tapped
+     */
+    onEdit: PropTypes.func.isRequired,
   };
 
+  _handleBack = event => this.props.onBack(event);
+  _handleRemove = event => this.props.onRemove(event);
+  _handleEdit = event => this.props.onEdit(event);
+
   render() {
+    const backIcon = (
+      <ActionIcon
+        icon={ActionIcon.BACK}
+        onClick={this._handleBack}
+      />);
+
+    const removeIcon = (
+      <ActionIcon
+        icon={ActionIcon.REMOVE}
+        onClick={this._handleRemove}
+      />);
+
     const header = (
       <Header
-        left={<ActionIcon icon={ActionIcon.BACK} />}
-        right={<ActionIcon icon={ActionIcon.REMOVE} />}
-      />
-    );
+        left={backIcon}
+        right={removeIcon}
+      />);
 
     const main = (
       <div>
@@ -38,7 +68,7 @@ export default class DetailScreen extends PureComponent {
       </div>
     );
 
-    const footer = (<Button>Edit</Button>);
+    const footer = (<Button onClick={this._handleEdit}>Edit</Button>);
 
     return (
       <BaseScreen
