@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import Logo from 'components/Logo';
-import styles from './index.css';
+import styles from './index.module.scss';
 
 export default class Header extends PureComponent {
   static propTypes = {
