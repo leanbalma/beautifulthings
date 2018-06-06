@@ -32,11 +32,13 @@ export default class ActionIcon extends PureComponent {
   _getIcon = () => {
     switch (this.props.icon) {
       case ActionIcon.BACK:
-        return faChevronLeft
+        return faChevronLeft;
       case ActionIcon.REMOVE:
-        return faTrashAlt
+        return faTrashAlt;
       case ActionIcon.APPLY:
-        return faCheck
+        return faCheck;
+      default:
+        return null;
     }
   }
 
