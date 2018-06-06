@@ -49,6 +49,9 @@ export default class InputText extends PureComponent {
   _handleChange = event => (this.props.onChange) ? this.props.onChange(event.target.value) : null;
   _handleKeyDown = event => (this.props.onEnter && event.key === 'Enter') ? this.props.onEnter() : null;
 
+  _setInputRef = input => this._inputRef = input;
+  focus = () => this._inputRef.focus();
+
   _togglePasswordVisibility = () => this.setState({ isPasswordVisible: !this.state.isPasswordVisible });
   _getInputIcon = () => {
     if (this.props.type === InputText.TEXT) return null;
@@ -77,6 +80,7 @@ export default class InputText extends PureComponent {
           placeholder={placeholder}
           onKeyDown={this._handleKeyDown}
           onChange={this._handleChange}
+          ref={this._setInputRef}
         />
         {icon}
       </div>
