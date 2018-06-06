@@ -25,10 +25,9 @@ export default class ActionIcon extends PureComponent {
     onClick: PropTypes.func,
   };
 
-  static defaultProps = {
-    color: '',
-    onClick: () => {},
-  }
+  static defaultProps = { color: '' }
+
+  _handleClick = event => (this.props.onClick) ? this.props.onClick(event) : null;
 
   _getIcon = () => {
     switch (this.props.icon) {
@@ -48,7 +47,7 @@ export default class ActionIcon extends PureComponent {
       <FontAwesomeIcon
         icon={icon}
         color={(this.props.color !== '') ? this.props.color : null}
-        onClick={event => this.props.onClick(event)}
+        onClick={this._handleClick}
       />
     );
   }
