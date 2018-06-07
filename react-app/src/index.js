@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './components/TestApp';
+import AppRouter from './containers/AppRouter';
 import registerServiceWorker from './registerServiceWorker';
 
+import './index.css';
+
 const startApp = () => {
-  ReactDOM.render(<App />, document.getElementById('root'));
+  ReactDOM.render(<AppRouter />, document.getElementById('root'));
   registerServiceWorker();
 }
 
