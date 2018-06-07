@@ -12,15 +12,28 @@
     "fast-sha256": "^1.1.0",
     "scrypt-async": "^2.0.0",
     "tweetnacl": "^1.0.0",
-    "tweetnacl-util": "^0.15.0"
+    "tweetnacl-util": "^0.15.0",
+    "react-router-dom": "^4.2.2",
+    "@fortawesome/fontawesome": "^1.1.8",
+    "@fortawesome/fontawesome-free-solid": "^5.0.13",
+    "@fortawesome/react-fontawesome": "0.0.20"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^3.4.6",
+    "@storybook/addon-knobs": "^3.4.6",
+    "@storybook/addon-links": "^3.4.6",
+    "@storybook/addons": "^3.4.6",
+    "@storybook/react": "^3.4.6",
+    "babel-core": "^6.26.3",
+    "babel-runtime": "^6.26.0",
     "node-sass": "^4.9.0",
     "stylelint": "^9.2.1",
     "stylelint-config-standard": "^18.2.0"
