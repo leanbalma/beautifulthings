@@ -12,22 +12,19 @@ export default class ActionIcon extends PureComponent {
     /**
      * The icon that this element will show.
      */
-    icon: PropTypes.oneOf([ActionIcon.BACK, ActionIcon.REMOVE, ActionIcon.APPLY]).isRequired,
-
-    /**
-     * The color that the icon will have.
-     */
-    color: PropTypes.string,
+    icon: PropTypes.oneOf([
+      ActionIcon.BACK,
+      ActionIcon.REMOVE,
+      ActionIcon.APPLY
+    ]).isRequired,
 
     /**
      * The function to call when this element is clicked.
      */
-    onClick: PropTypes.func,
+    onClick: PropTypes.func.isRequired,
   };
 
-  static defaultProps = { color: '' }
-
-  _handleClick = event => (this.props.onClick) ? this.props.onClick(event) : null;
+  _handleClick = event => this.props.onClick(event);
 
   _getIcon = () => {
     switch (this.props.icon) {
@@ -48,7 +45,6 @@ export default class ActionIcon extends PureComponent {
     return (
       <FontAwesomeIcon
         icon={icon}
-        color={(this.props.color !== '') ? this.props.color : null}
         onClick={this._handleClick}
       />
     );
