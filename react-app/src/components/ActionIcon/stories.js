@@ -14,7 +14,7 @@ const availableIcons = {
   apply: ActionIcon.APPLY,
 }
 
-stories.add('ActionIcon with onClick prop', () => (
+stories.add('ActionIcon', () => (
   <ActionIcon
     icon={selectV2('Icon', availableIcons, availableIcons.back)}
     onClick={action('ActionIcon clicked')}
