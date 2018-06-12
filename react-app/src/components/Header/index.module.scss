@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  background-color: azure;
+}
+
+%element {
+  flex-basis: 33vw;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.left {
+  @extend %element;
+  margin-left: 5px;
+}
+
+.center {
+  @extend %element;
+  flex-basis: 34vw;
+  text-align: center;
+}
+
+.right {
+  @extend %element;
+  text-align: right;
+  margin-right: 5px;
+}
