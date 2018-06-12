@@ -2,9 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import BaseScreen from 'containers/BaseScreen';
-import Header     from 'components/Header';
+import Header from 'components/Header';
 import ActionIcon from 'components/ActionIcon';
-import Button     from 'components/Button';
+import Button from 'components/Button';
 
 export default class DetailScreen extends PureComponent {
   static propTypes = {
