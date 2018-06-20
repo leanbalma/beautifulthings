@@ -38,19 +38,22 @@ class Account {
   }
 
   toString() {
+    const pkAsArray = Array.from(this._pk);
     return JSON.stringify({
-      username: this._username,
-      pk: this._pk,
-      tz: this._tz,
-      offset: this._offset
+      Username: this._username,
+      Pk: pkAsArray,
+      Tz: this._tz,
+      Offset: this._offset
     });
   }
 
   _generateNonce(publicKeyA, publicKeyB) {
-    let state = blake.blake2bInit(nacl.box.nonceLength, null);
+    const nonceComputeLength = 32;
+    const nonceExpectedLength = 24;
+    let state = blake.blake2bInit(nonceComputeLength, null);
     blake.blake2bUpdate(state, publicKeyA);
     blake.blake2bUpdate(state, publicKeyB);
-    return blake.blake2bFinal(state);
+    return blake.blake2bFinal(state).subarray(0, nonceExpectedLength);
   }
 
   encrypt(plainText) {
