@@ -31,23 +31,18 @@ export default class ButtonsModal extends PureComponent {
   static defaultProps = { secondaryButton: null }
 
   render() {
-    const content = (
-      <div className={styles.container}>
-        <div>
-          {this.props.message}
-        </div>
-        <div className={styles.buttonsContainer}>
-          {this.props.secondaryButton}
-          {this.props.primaryButton}
-        </div>
-      </div>
-    );
-
     return (
-      <BaseModal
-        visible={this.props.visible}
-        content={content}
-      />
+      <BaseModal visible={this.props.visible}>
+        <div className={styles.container}>
+          <div>
+            {this.props.message}
+          </div>
+          <div className={styles.buttonsContainer}>
+            {this.props.secondaryButton}
+            {this.props.primaryButton}
+          </div>
+        </div>
+      </BaseModal>
     );
   }
 }

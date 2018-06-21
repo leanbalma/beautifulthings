@@ -21,20 +21,15 @@ export default class LoadingModal extends PureComponent {
   };
 
   render() {
-    const content = (
-      <div className={styles.container}>
-        <FontAwesomeIcon icon={faSpinner} pulse />
-        <div>
-          {this.props.message}
-        </div>
-      </div>
-    );
-
     return (
-      <BaseModal
-        visible={this.props.visible}
-        content={content}
-      />
+      <BaseModal visible={this.props.visible}>
+        <div className={styles.container}>
+          <FontAwesomeIcon icon={faSpinner} pulse />
+          <div>
+            {this.props.message}
+          </div>
+        </div>
+      </BaseModal>
     );
   }
 }

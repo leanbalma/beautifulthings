@@ -13,26 +13,18 @@ export default class BaseModal extends PureComponent {
     /**
      * The element to use as the modal content
      */
-    content: PropTypes.element.isRequired
+    children: PropTypes.element.isRequired
   };
 
-  _getModal = () => {
+  render() {
+    if (!this.props.visible) return null;
+
     return (
       <div>
         <div className={styles.opacityLayer} />
         <div className={styles.modal}>
-          {this.props.content}
+          {this.props.children}
         </div>
-      </div>
-    )
-  }
-
-  render() {
-    const modal = (this.props.visible) ? this._getModal() : null;
-
-    return (
-      <div>
-        {modal}
       </div>
     );
   }
