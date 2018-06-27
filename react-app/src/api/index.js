@@ -10,21 +10,21 @@ class Api {
     this._account = new Account(username, keyPair);
   }
 
-  _getUrl(path, withToken = false) {
+  _getUrl(path) {
     let url = `${_HOST}${path}`;
-    if (withToken) url += `?token=${this._token}`;
+    if (this._token) url += `?token=${this._token}`;
 
     return url;
   }
 
-  async _get(path, withToken = false) {
-    const url = this._getUrl(path, withToken);
+  async _get(path) {
+    const url = this._getUrl(path);
 
     return await fetch(url);
   }
 
-  async _post(path, body, withToken = false) {
-    const url = this._getUrl(path, withToken);
+  async _post(path, body) {
+    const url = this._getUrl(path);
 
     const options = {
       method: 'POST',
@@ -61,7 +61,7 @@ class Api {
       Ct: cipherText,
     });
 
-    const response = await this._post('things', data, true);
+    const response = await this._post('things', data);
 
     return response.ok;
   }
@@ -69,7 +69,7 @@ class Api {
   _decryptReceivedEntry = entry => createEntry(entry.Date, this._account.decrypt(entry.Content));
 
   async getEntries(from, to) {
-    const response = await this._get(`things/${from}/${to}`, true);
+    const response = await this._get(`things/${from}/${to}`);
 
     if (!response.ok) throw new ErrorCannotGetEntries();
 
