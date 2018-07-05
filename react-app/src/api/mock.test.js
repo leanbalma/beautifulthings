@@ -1,71 +1,56 @@
 /* eslint-env jest */
-import Account from 'account';
-import api, { Api, ErrorCannotGetEntries } from './mock.js';
+import api from './mock.js';
+
+const MOCK_INITIAL_VALUES = window.mock;
+let mock;
 
 const entry = {
   date: '2018-01-01',
   text: 'Text',
-}
+};
 
-describe('use existing account', () => {
-  beforeAll(async () => {
-    const keyPair = await Account.generateKeyPair(Api.mockUsername, Api.mockPassword);
-    api.initAccount(Api.mockUsername, keyPair);
+beforeEach(() => mock = MOCK_INITIAL_VALUES);
+
+describe('sign up', () => {
+  test('can sign up with new account', async () => {
+    mock.signUpResult = true;
+    const result = await api.signUp();
+    expect(result).toBe(true);
   });
 
   test('cannot sign up with an existing account', async () => {
+    mock.signUpResult = false;
     const result = await api.signUp();
     expect(result).toBe(false);
   });
+});
 
-  test('sign in with valid account', async () => {
+describe('sign in', () => {
+  test('can sign in with valid account', async () => {
+    mock.signInResult = true;
     const result = await api.signIn();
     expect(result).toBe(true);
   });
 
-  test('add entry', async () => {
+  test('cannot sign in with invalid account', async () => {
+    mock.signInResult = false;
+    const result = await api.signIn();
+    expect(result).toBe(false);
+  });
+});
+
+describe('user requests when signed in', () => {
+  beforeEach(() => mock.signedIn = true);
+
+  test('add a new entry', async () => {
     const result = await api.addEntry(entry);
     expect(result).toBe(true);
   });
 
   test('request entries', async () => {
-    let result = await api.getEntries('2018-01-01', '2018-01-02');
+    mock.entries = [entry];
+    const result = await api.getEntries('2018-01-01', '2019-01-01');
     expect(result).toHaveLength(1);
-    expect(result[0]).toEqual(entry);
-
-    result = await api.getEntries('2017-01-01', '2017-01-02');
-    expect(result).toHaveLength(0);
-  });
-});
-
-describe('use unexisting account', () => {
-  beforeAll(async () => {
-    const username = 'unexistingUsername';
-    const keyPair = await Account.generateKeyPair(username, 'pass');
-    api.initAccount(username, keyPair);
-  });
-
-  test('can sign up with a new account', async () => {
-    const result = await api.signUp();
-    expect(result).toBe(true);
-  });
-
-  test('cannot sign in with an unexisting account', async () => {
-    const result = await api.signIn();
-    expect(result).toBe(false);
-  });
-
-  test('cannot add entry with an unexisting account', async () => {
-    const result = await api.addEntry(entry);
-    expect(result).toBe(false);
-  });
-
-  test('cannot request entries', async () => {
-    expect.assertions(1);
-    try {
-      await api.getEntries('2018-01-01', '2018-01-02');
-    } catch (error) {
-      expect(error).toBeInstanceOf(ErrorCannotGetEntries);
-    }
+    expect(result).toContainEqual(entry);
   });
 });
