@@ -9,6 +9,10 @@ nacl.util = require('tweetnacl-util');
 class ErrorAuthenticationFail extends Error {}
 
 class Account {
+  static validateUserPass(username, password) {
+    return username.length > 0 && password.length > 0;
+  }
+
   static generateKeyPair(username, password) {
     return new Promise(resolve => {
       const hashedPassword = sha256(nacl.util.decodeUTF8(password));
