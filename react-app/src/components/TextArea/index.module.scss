@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.label { font-size: 14px; }
+
+.charCounter {
+  font-size: 14px;
+  text-align: right;
+}

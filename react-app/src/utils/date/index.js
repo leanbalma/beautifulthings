@@ -7,4 +7,12 @@ function isDateStringValid(dateString) {
   return isAValidDate;
 }
 
-export { isDateStringValid }
+function getCurrentDateString() {
+  const tzOffsetMs = (new Date()).getTimezoneOffset() * 60000;
+  const localeDate = (new Date(Date.now() - tzOffsetMs));
+  const localeDateString = localeDate.toISOString().substr(0, 10);
+
+  return localeDateString;
+}
+
+export { isDateStringValid, getCurrentDateString }
