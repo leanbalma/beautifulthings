@@ -21,17 +21,35 @@ const entryDate = '2018-05-01';
 const encryptedEntry = createEntry(entryDate, decryptedToken);
 const decryptedEntry = createEntry(entryDate, decryptedToken);
 
+/**
+ * This function replaces the real `fetch` (which we use to query the server)
+ * with a custom mock that returns whatever we want to.
+ *
+ * This is used basically to emulate a server that behaves as we need for each
+ * test.
+ */
+function mockServer(ok, data = null) {
+  global.fetch = jest.fn().mockImplementation(() =>
+    Promise.resolve({
+      ok,
+      json: () => data,
+    })
+  );
+}
+const originalFetch = global.fetch;
+
 beforeAll(async () => api.initAccount(username, keyPair));
+afterAll(() => global.fetch = originalFetch);
 
 describe('sign up', () => {
   test('can sign up with a new account', async () => {
-    global.fetch = jest.fn().mockImplementation(() => Promise.resolve({ ok: true }));
+    mockServer(true);
     const result = await api.signUp();
     expect(result).toBe(true);
   });
 
   test('cannot sign up with an existing account', async () => {
-    global.fetch = jest.fn().mockImplementation(() => Promise.resolve({ ok: false }));
+    mockServer(false);
     const result = await api.signUp();
     expect(result).toBe(false);
   });
@@ -39,19 +57,14 @@ describe('sign up', () => {
 
 describe('sign in', () => {
   test('can sign in with valid account', async () => {
-    const serverResponse = Promise.resolve({
-      ok: true,
-      json: () => {
-        return { EncryptedToken: encryptedToken };
-      }
-    });
-    global.fetch = jest.fn().mockImplementation(() => serverResponse);
+    const serverData = { EncryptedToken: encryptedToken };
+    mockServer(true, serverData);
     const result = await api.signIn();
     expect(result).toBe(true);
   });
 
   test('cannot sign in with invalid account', async () => {
-    global.fetch = jest.fn().mockImplementation(() => Promise.resolve({ ok: false }));
+    mockServer(false);
     const result = await api.signIn();
     expect(result).toBe(false);
   });
@@ -59,22 +72,17 @@ describe('sign in', () => {
 
 describe('user requests when signed in', () => {
   test('add a new entry', async () => {
-    global.fetch = jest.fn().mockImplementation(() => Promise.resolve({ ok: true }));
+    mockServer(true);
     const result = await api.addEntry(encryptedEntry);
     expect(result).toBe(true);
   });
 
   test('request entries', async () => {
-    const serverResponse = Promise.resolve({
-      ok: true,
-      json: () => {
-        return [{
-          Date: entryDate,
-          Content: encryptedToken
-        }];
-      }
-    });
-    global.fetch = jest.fn().mockImplementation(() => serverResponse);
+    const serverData = [{
+      Date: entryDate,
+      Content: encryptedToken
+    }];
+    mockServer(true, serverData);
     const result = await api.getEntries('2018-01-01', '2019-01-01');
     expect(result).toHaveLength(1);
     expect(result).toContainEqual(decryptedEntry);
