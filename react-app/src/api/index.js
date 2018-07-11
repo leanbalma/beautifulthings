@@ -20,7 +20,7 @@ class Api {
   async _get(path) {
     const url = this._getUrl(path);
 
-    return await fetch(url);
+    return fetch(url);
   }
 
   async _post(path, body) {
@@ -31,7 +31,7 @@ class Api {
       body
     }
 
-    return await fetch(url, options);
+    return fetch(url, options);
   }
 
   async signUp() {
