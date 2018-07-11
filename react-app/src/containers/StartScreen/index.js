@@ -20,8 +20,7 @@ export default class StartScreen extends React.PureComponent {
     };
   }
 
-  _handleUsernameChange = username => this.setState({ username });
-  _handlePasswordChange = password => this.setState({ password });
+  _handleChanges = (username, password) => this.setState({ username, password });
   _handlePasswordEnter = () => this._signIn();
 
   _handleSignUp = () => this.props.onSignUp();
@@ -40,8 +39,7 @@ export default class StartScreen extends React.PureComponent {
 
     return (
       <BaseUserPassScreen
-        onUsernameChange={this._handleUsernameChange}
-        onPasswordChange={this._handlePasswordChange}
+        onChanges={this._handleChanges}
         onPasswordEnter={this._handlePasswordEnter}
       >
         <div className={styles.container}>

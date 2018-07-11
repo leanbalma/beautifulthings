@@ -8,8 +8,7 @@ import Logo from 'components/Logo';
 
 export default class BaseUserPassScreen extends React.PureComponent {
   static propTypes = {
-    onUsernameChange: PropTypes.func.isRequired,
-    onPasswordChange: PropTypes.func.isRequired,
+    onChanges: PropTypes.func.isRequired,
     onPasswordEnter: PropTypes.func,
     children: PropTypes.element.isRequired,
   }
@@ -32,8 +31,10 @@ export default class BaseUserPassScreen extends React.PureComponent {
   _setUsernameInputRef = element => this._usernameInput = element;
   _setPasswordInputRef = element => this._passwordInput = element;
 
-  _handleUsernameChange = value => this.props.onUsernameChange(value);
-  _handlePasswordChange = value => this.props.onPasswordChange(value);
+  _notifyChanges = () => this.props.onChanges(this.state.username, this.state.password);
+
+  _handleUsernameChange = username => this.setState({ username }, this._notifyChanges);
+  _handlePasswordChange = password => this.setState({ password }, this._notifyChanges);
 
   _handleUsernameEnter = () => this._passwordInput.focus();
   _handlePasswordEnter = () => this.props.onPasswordEnter ? this.props.onPasswordEnter() : null;
