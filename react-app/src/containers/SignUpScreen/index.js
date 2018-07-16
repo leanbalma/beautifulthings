@@ -8,8 +8,8 @@ import Button from 'components/Button';
 
 import styles from './index.module.scss';
 
-export default class StartScreen extends React.PureComponent {
-  static propTypes = { onSignUp: PropTypes.func.isRequired }
+export default class SignUpScreen extends React.PureComponent {
+  static propTypes = { onSignIn: PropTypes.func.isRequired }
 
   constructor(props) {
     super(props);
@@ -21,17 +21,17 @@ export default class StartScreen extends React.PureComponent {
   }
 
   _handleChanges = (username, password) => this.setState({ username, password });
-  _handlePasswordEnter = () => this._signIn();
+  _handlePasswordEnter = () => this._signUp();
 
-  _handleSignUp = () => this.props.onSignUp();
-  _handleSignIn = () => this._signIn();
+  _handleSignUp = () => this._signUp();
+  _handleSignIn = () => this.props.onSignIn();
 
-  _signIn() {
+  _signUp() {
     const {username, password} = this.state;
 
     if (!Account.validateUserPass(username, password)) return;
 
-    // TODO: Show spinner, create account and signin
+    // TODO: Show spinner, create account and signup
   }
 
   render() {
@@ -45,13 +45,13 @@ export default class StartScreen extends React.PureComponent {
         <div className={styles.container}>
           <Button
             disabled={!validUserPass}
-            onClick={this._handleSignIn}
+            onClick={this._signUp}
           >
-            Sign In
-          </Button>
-          <Button onClick={this._handleSignUp}>
             Sign Up
           </Button>
+          <span onClick={this._handleSignIn}>
+            Or sign in
+          </span>
         </div>
       </BaseUserPassScreen>
     );
