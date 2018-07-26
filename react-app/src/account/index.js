@@ -9,8 +9,12 @@ nacl.util = require('tweetnacl-util');
 class ErrorAuthenticationFail extends Error {}
 
 class Account {
-  static validateUserPass(username, password) {
-    return username.length > 0 && password.length > 0;
+  static validateUsername(username) {
+    return username.length > 0;
+  }
+
+  static validatePassword(password) {
+    return password.length > 6;
   }
 
   static generateKeyPair(username, password) {
