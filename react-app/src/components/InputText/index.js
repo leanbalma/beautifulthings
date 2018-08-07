@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames/bind';
 
 import styles from './index.module.scss';
+const _classNames = classNames.bind(styles);
 
 export default class InputText extends React.PureComponent {
   static TEXT = 'text';
@@ -89,17 +91,19 @@ export default class InputText extends React.PureComponent {
 
   _getInput() {
     const { type, placeholder } = this.props;
-    const TEXT = InputText.TEXT;
 
-    const inputType = (type === TEXT || this.state.isPasswordVisible) ? TEXT : InputText.PASSWORD;
-    const inputStyle = type === TEXT ? styles.text : styles.password;
-    const inputPlaceholder = placeholder || '';
+    const style = _classNames('text', {
+      password: this.state.isPasswordVisible,
+    });
+
+    let inputType = InputText.TEXT;
+    if (type === InputText.PASSWORD && !this.state.isPasswordVisible) inputType = InputText.PASSWORD;
 
     return (
       <input
-        className={inputStyle}
+        className={style}
         type={inputType}
-        placeholder={inputPlaceholder}
+        placeholder={placeholder || ''}
         onKeyDown={this._handleKeyDown}
         onChange={this._handleChange}
         ref={this._setInputRef}
