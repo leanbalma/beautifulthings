@@ -25,7 +25,7 @@ export default class StartScreen extends React.PureComponent {
   _validateForm() {
     const { username, password } = this.state;
 
-    return username.length && password.length;
+    return username && password;
   }
 
   _handleUsernameChange = username => {
@@ -74,40 +74,38 @@ export default class StartScreen extends React.PureComponent {
   _signIn() { /* TODO: Show spinner, create account and signin or show modal */ }
 
   _getSignInButton() {
-    const validFormDate = this._validateForm();
+    const validFormData = this._validateForm();
 
     return Button({
-      disabled: !validFormDate,
+      disabled: !validFormData,
       onClick: this._handleSignIn,
       children: "Sign in",
     });
   }
 
-  _getSignUpButton() {
-    return Button({
-      onClick: this._handleSignUp,
-      children: "Sign up",
-    });
-  }
+  _signUpButton = Button({
+    onClick: this._handleSignUp,
+    children: "Sign up",
+  });
+
+  _closeModalButton = Button({
+    children: "Try again",
+    onClick: this._toggleModalVisibility,
+    small: true,
+  });
 
   _getWrongUsernameOrPasswordModal() {
-    const closeModalButton = Button({
-      children: "Try again",
-      onClick: this._toggleModalVisibility,
-      small: true,
-    });
-
     return ButtonsModal({
       visible: this.state.isModalVisible,
       message: "Your username or password is incorrect",
-      primaryButton: closeModalButton,
+      primaryButton: this._closeModalButton,
     });
   }
 
   render() {
     const { usernameError, passwordError } = this.state;
+
     const signInButton = this._getSignInButton();
-    const signUpButton = this._getSignUpButton();
     const wrongUsernameOrPasswordModal = this._getWrongUsernameOrPasswordModal();
 
     return (
@@ -128,7 +126,7 @@ export default class StartScreen extends React.PureComponent {
               - Create your account -
             </div>
             <div>
-              {signUpButton}
+              {this._signUpButton}
             </div>
           </div>
         </BaseUserPassScreen>

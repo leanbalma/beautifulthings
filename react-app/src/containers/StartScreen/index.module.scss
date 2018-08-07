@@ -6,11 +6,11 @@
   display: flex;
   text-align: center;
   flex-direction: column;
+}
 
-  .createAccountLabelContainer {
-    margin: 15px 0;
-    font-size: 20px;
-    color: $lightGray;
-    font-family: BariolRegular;
-  }
+.createAccountLabelContainer {
+  margin: 15px 0;
+  font-size: 20px;
+  color: $lightGray;
+  font-family: BariolRegular;
 }
