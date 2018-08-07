@@ -26,7 +26,7 @@ export default class SignUpScreen extends React.PureComponent {
   _validateForm() {
     const { username, password } = this.state;
 
-    return username.length && password.length;
+    return username && password;
   }
 
   _handleUsernameChange = username => {
@@ -85,36 +85,37 @@ export default class SignUpScreen extends React.PureComponent {
     });
   }
 
-  _getSignedUpModal() {
-    const signInButton = Button({
-      children: "Sign in",
-      onClick: this._handleSignIn,
-      small: true,
-    });
+  _signInButton = Button({
+    children: "Sign in",
+    onClick: this._handleSignIn,
+    small: true,
+  });
 
+  _getSignedUpModal() {
     return ButtonsModal({
       visible: this.state.isSignedUpModalVisible,
       message: "Successful registration",
-      primaryButton: signInButton,
+      primaryButton: this._signInButton,
     });
   }
 
-  _getTryAnotherModal() {
-    const closeModalButton = Button({
-      children: "Try another",
-      onClick: this._toggleTryAnotherModalVisibility,
-      small: true,
-    });
+  _closeModalButton = Button({
+    children: "Try another",
+    onClick: this._toggleTryAnotherModalVisibility,
+    small: true,
+  });
 
+  _getTryAnotherModal() {
     return ButtonsModal({
       visible: this.state.isTryAnotherModalVisible,
       message: "Username already exists",
-      primaryButton: closeModalButton,
+      primaryButton: this._closeModalButton,
     });
   }
 
   render() {
     const { usernameError, passwordError } = this.state;
+
     const signUpButton = this._getSignUpButton();
     const signedUpModal = this._getSignedUpModal();
     const tryAnotherModal = this._getTryAnotherModal();
