@@ -96,7 +96,7 @@ export default class BaseUserPassScreen extends React.PureComponent {
           </div>
           <div className={styles.space} />
           <div className={styles.formContainer}>
-            <div className={styles.usernameInputContainer}>
+            <div>
               {usernameInput}
             </div>
             <div>
