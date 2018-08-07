@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames/bind';
 
 import styles from './index.module.scss';
+const _classNames = classNames.bind(styles);
 
 const BaseModal = props => {
   const {
@@ -12,7 +14,10 @@ const BaseModal = props => {
 
   if (!visible) return null;
 
-  const modalStyle = leftModal ? styles.leftModal : styles.floattingModal;
+  const modalStyle = _classNames('modal', {
+    floattingModal: !leftModal,
+  });
+
   return (
     <div className={styles.container}>
       <div className={modalStyle}>
@@ -24,12 +29,12 @@ const BaseModal = props => {
 
 BaseModal.propTypes = {
   /**
-   * Whenever the modal is visible or not
+   * Whether the modal is visible or not
    */
   visible: PropTypes.bool.isRequired,
 
   /**
-   * Whenever the modal is displayed on the left or if
+   * Whether the modal is displayed on the left or if
    * is displayed as a floating modal (default behaviour)
    */
   leftModal: PropTypes.bool,
