@@ -10,10 +10,14 @@
   font-family: BariolRegular;
   background-color: $violet;
   border-radius: 10px;
+}
 
-  .buttonsContainer {
-    margin-top: 25px;
-    display: flex;
-    justify-content: space-around;
+.buttonsContainer {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+
+  & > div {
+    padding: 0 10px;
   }
 }

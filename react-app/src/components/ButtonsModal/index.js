@@ -14,28 +14,20 @@ const ButtonsModal = props => {
   } = props;
 
   function _getButtons() {
-    if (!secondaryButton) {
-      return (
-        <div className={styles.buttonsContainer}>
-          <div>
-            {primaryButton}
-          </div>
+    const secondaryButtonContainer = !secondaryButton ? null : (
+      <div>
+        {secondaryButton}
+      </div>
+    );
+
+    return (
+      <div className={styles.buttonsContainer}>
+        <div>
+          {primaryButton}
         </div>
-      );
-    } else {
-      return (
-        <div className={styles.buttonsContainer}>
-          <div />
-          <div>
-            {primaryButton}
-          </div>
-          <div>
-            {secondaryButton}
-          </div>
-          <div />
-        </div>
-      );
-    }
+        {secondaryButtonContainer}
+      </div>
+    );
   }
 
   const buttons = _getButtons();
@@ -60,7 +52,7 @@ const ButtonsModal = props => {
 
 ButtonsModal.propTypes = {
   /**
-   * Whenever the modal is visible or not
+   * Whether the modal is visible or not
    */
   visible: PropTypes.bool.isRequired,
 
