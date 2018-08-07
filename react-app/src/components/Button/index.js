@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames/bind';
 
 import styles from './index.module.scss';
+const _classNames = classNames.bind(styles);
 
 const Button = props => {
   const {
@@ -11,28 +13,22 @@ const Button = props => {
     small,
   } = props;
 
-  const _handleClick = () => {
-    if (!disabled) onClick();
-  };
+  const style = _classNames('container', {
+    small,
+    disabled,
+  });
 
-  function _getStyle() {
-    if (small) {
-      if (disabled) return styles.smallDisabled;
-      return styles.smallEnabled;
-    } else {
-      if (disabled) return styles.normalDisabled;
-      return styles.normalEnabled;
-    }
-  }
-
-  const style = _getStyle();
+  const buttonStyle = _classNames('button', {
+    small,
+    normal: !small,
+  });
 
   return (
     <div className={style}>
       <button
-        className={styles.button}
+        className={buttonStyle}
         disabled={disabled}
-        onClick={_handleClick}
+        onClick={onClick}
       >
         {children}
       </button>
