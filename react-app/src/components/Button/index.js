@@ -1,39 +1,64 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames/bind';
 
-export default class Button extends PureComponent {
-  static propTypes = {
-    /**
-     * The label or element the button will show.
-     */
-    children: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.element,
-    ]).isRequired,
+import styles from './index.module.scss';
+const _classNames = classNames.bind(styles);
 
-    /**
-     * The function to call when this button is clicked.
-     */
-    onClick: PropTypes.func,
+const Button = props => {
+  const {
+    children,
+    onClick,
+    disabled,
+    small,
+  } = props;
 
-    /**
-     * Whether this button is disabled or not.
-     */
-    disabled: PropTypes.bool,
-  };
+  const style = _classNames('container', {
+    small,
+    disabled,
+  });
 
-  static defaultProps = { disabled: false }
+  const buttonStyle = _classNames('button', {
+    small,
+    normal: !small,
+  });
 
-  _handleClick = event => (this.props.onClick) ? this.props.onClick(event) : null;
-
-  render() {
-    return (
+  return (
+    <div className={style}>
       <button
-        disabled={this.props.disabled}
-        onClick={this._handleClick}
+        className={buttonStyle}
+        disabled={disabled}
+        onClick={onClick}
       >
-        {this.props.children}
+        {children}
       </button>
-    );
-  }
+    </div>
+  );
 }
+
+Button.propTypes = {
+  /**
+   * The label or element the button will show.
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]).isRequired,
+
+  /**
+   * The function to call when the button is clicked.
+   */
+  onClick: PropTypes.func.isRequired,
+
+  /**
+   * Whether the button is disabled or not. Default value: false
+   */
+  disabled: PropTypes.bool,
+
+  /**
+   * Whether the button is a small one or not. Default value: false
+   */
+  small: PropTypes.bool,
+};
+
+export default Button;
