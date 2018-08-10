@@ -1,52 +1,45 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faTrashAlt, faCheck } from '@fortawesome/fontawesome-free-solid';
+import classNames from 'classnames/bind';
 
-export default class ActionIcon extends PureComponent {
-  static BACK = 'back';
-  static REMOVE = 'remove';
-  static APPLY = 'apply';
+import styles from './index.module.scss';
+const _classNames = classNames.bind(styles);
 
-  static propTypes = {
-    /**
-     * The icon that this element will show.
-     */
-    icon: PropTypes.oneOf([
-      ActionIcon.BACK,
-      ActionIcon.REMOVE,
-      ActionIcon.APPLY
-    ]).isRequired,
+const ActionIcon = ({ icon, onClick }) => {
+  const style = _classNames('container', icon);
 
-    /**
-     * The function to call when this element is clicked.
-     */
-    onClick: PropTypes.func.isRequired,
-  };
-
-  _handleClick = event => this.props.onClick(event);
-
-  _getIcon = () => {
-    switch (this.props.icon) {
-      case ActionIcon.BACK:
-        return faChevronLeft;
-      case ActionIcon.REMOVE:
-        return faTrashAlt;
-      case ActionIcon.APPLY:
-        return faCheck;
-      default:
-        return null;
-    }
-  }
-
-  render() {
-    const icon = this._getIcon();
-
-    return (
-      <FontAwesomeIcon
-        icon={icon}
-        onClick={this._handleClick}
-      />
-    );
-  }
+  return (
+    <div
+      className={style}
+      onClick={onClick}
+    />
+  );
 }
+
+ActionIcon.BACK = 'back';
+ActionIcon.APPLY = 'apply';
+ActionIcon.EXPAND = 'expand';
+ActionIcon.COLLAPSE = 'collapse';
+ActionIcon.SETTINGS = 'settings';
+ActionIcon.HIDE = 'hide';
+
+ActionIcon.propTypes = {
+  /**
+   * The icon that the element will show.
+   */
+  icon: PropTypes.oneOf([
+    ActionIcon.BACK,
+    ActionIcon.APPLY,
+    ActionIcon.EXPAND,
+    ActionIcon.COLLAPSE,
+    ActionIcon.SETTINGS,
+    ActionIcon.HIDE,
+  ]).isRequired,
+
+  /**
+   * The function to call when this element is clicked.
+   */
+  onClick: PropTypes.func.isRequired,
+};
+
+export default ActionIcon;
