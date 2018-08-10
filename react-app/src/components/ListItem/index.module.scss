@@ -1,0 +1,72 @@
+@import 'styles/colors.scss';
+@import 'styles/fonts.scss';
+
+.container {
+  color: $darkGray;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-family: BariolRegular;
+  border: 2px solid $lightGray;
+}
+
+.topContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+
+  & > div:first-child {
+    width: 90%;
+  }
+}
+
+.date {
+  color: $green;
+  font-size: 25px;
+}
+
+.textPreview {
+  font-size: 15px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &.expanded {
+    display: none;
+  }
+}
+
+.divider {
+  display: none;
+
+  &.expanded {
+    display: inherit;
+    width: 100%;
+    margin: 10px 0;
+    border-bottom: 1px solid $lightGray;
+  }
+}
+
+.fullText {
+  display: none;
+
+  &.expanded {
+    display: inherit;
+    font-size: 20px;
+  }
+}
+
+.buttonsContainer {
+  display: none;
+
+  &.expanded {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    & > div:last-child {
+      margin-left: 10px;
+    }
+  }
+}
