@@ -1,0 +1,28 @@
+@import 'styles/colors.scss';
+@import 'styles/fonts.scss';
+
+.container {
+  display: flex;
+  align-items: center;
+  color: $darkGray;
+  font-size: 25px;
+  font-family: BariolRegular;
+}
+
+$icons: (
+  notifications: './images/Notifications.svg',
+  signOut: './images/SignOut.svg',
+);
+
+.icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  background: url('./images/Notifications.svg') center center/contain no-repeat;
+
+  @each $icon, $source in $icons {
+    &.#{$icon} {
+      background-image: url($source);
+    }
+  }
+}
