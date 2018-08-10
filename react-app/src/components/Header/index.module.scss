@@ -2,29 +2,19 @@
   display: flex;
   align-items: center;
   flex-direction: row;
-  justify-content: center;
-  background-color: azure;
-}
-
-%element {
-  flex-basis: 33vw;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  padding: 25px 35px;
 }
 
 .left {
-  @extend %element;
-  margin-left: 5px;
+  width: 30%;
 }
 
 .center {
-  @extend %element;
-  flex-basis: 34vw;
-  text-align: center;
+  width: 40%;
 }
 
 .right {
-  @extend %element;
-  text-align: right;
-  margin-right: 5px;
+  width: 30%;
+  display: flex;
+  justify-content: flex-end;
 }
