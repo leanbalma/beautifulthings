@@ -1,0 +1,23 @@
+.container {
+  width: 25px;
+  height: 25px;
+  background: url('./images/Apply.svg') center center/contain no-repeat;
+}
+
+$icons: (
+  apply: './images/Apply.svg',
+  back: './images/Back.svg',
+  expand: './images/Expand.svg',
+  collapse: './images/Expand.svg',
+  settings: './images/Settings.svg',
+  hide: './images/Hide.svg',
+);
+
+@each $icon, $source in $icons {
+  .#{$icon} {
+    background-image: url($source);
+    @if $icon == 'collapse' {
+      transform: rotate(180deg);
+    }
+  }
+}
