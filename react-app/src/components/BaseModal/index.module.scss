@@ -20,4 +20,9 @@
     align-items: center;
     justify-content: center;
   }
+
+  &.leftModal {
+    display: inline-block;
+    width: auto;
+  }
 }

@@ -5,21 +5,29 @@ import classNames from 'classnames/bind';
 import styles from './index.module.scss';
 const _classNames = classNames.bind(styles);
 
-const BaseModal = props => {
-  const {
-    visible,
-    leftModal,
-    children,
-  } = props;
-
+const BaseModal = ({ visible, leftModal, children, onDismiss }) => {
   if (!visible) return null;
 
+  let _background = null;
+  const _setBackgroundRef = element => _background = element;
+
+  const _dismiss = event => {
+    const target = event.target;
+
+    if (target === _background && onDismiss) onDismiss();
+  }
+
   const modalStyle = _classNames('modal', {
+    leftModal,
     floattingModal: !leftModal,
   });
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      onClick={_dismiss}
+      ref={_setBackgroundRef}
+    >
       <div className={modalStyle}>
         {children}
       </div>
@@ -43,6 +51,11 @@ BaseModal.propTypes = {
    * The element to use as the modal content
    */
   children: PropTypes.element.isRequired,
+
+  /**
+   * The function to call when the dismissible area is clicked
+   */
+  onDismiss: PropTypes.func,
 };
 
 export default BaseModal;
