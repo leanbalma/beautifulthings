@@ -25,4 +25,5 @@
     </platform>
     <engine name="android" spec="~7.0.0" />
     <plugin name="cordova-plugin-secure-storage" spec="^2.6.8" />
+    <plugin name="cordova-plugin-local-notification" spec="https://github.com/katzer/cordova-plugin-local-notifications.git" />
 </widget>
