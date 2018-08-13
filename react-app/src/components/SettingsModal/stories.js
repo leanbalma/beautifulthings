@@ -3,9 +3,11 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withKnobs, text } from '@storybook/addon-knobs/react';
 
+import { DAILY } from 'notifications';
+
 import SettingsModal from './';
 
-const _setModalRef = element => element.show(true);
+const _setModalRef = element => element.show(DAILY);
 
 const stories = storiesOf('SettingsModal', module);
 stories.addDecorator(withKnobs);

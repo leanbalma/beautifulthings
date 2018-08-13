@@ -2,6 +2,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
+import { DAILY } from 'notifications';
+
 import ListScreen from './';
 
 const mockEntries = [{
@@ -24,7 +26,7 @@ const stories = storiesOf('ListScreen', module);
 stories.add('ListScreen without entries', () => <ListScreen
   entries={[]}
   username={username}
-  daily
+  notifications={DAILY}
   onAdd={onAdd}
   onEdit={onEdit}
   onDelete={onDelete}
@@ -35,7 +37,7 @@ stories.add('ListScreen without entries', () => <ListScreen
 stories.add('ListScreen with mock entries', () => <ListScreen
   entries={mockEntries}
   username={username}
-  daily
+  notifications={DAILY}
   onAdd={onAdd}
   onEdit={onEdit}
   onDelete={onDelete}

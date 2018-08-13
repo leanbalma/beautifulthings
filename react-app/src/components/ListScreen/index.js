@@ -9,13 +9,15 @@ import ListItem from 'components/ListItem';
 import SettingsModal from 'components/SettingsModal';
 import Welcome from 'components/Welcome';
 
+import { DAILY, WEEKLY } from 'notifications';
+
 import styles from './index.module.scss';
 
-const ListScreen = ({ entries, username, daily, onAdd, onEdit, onDelete, scheduleNotifications, onSignOut }) => {
+const ListScreen = ({ entries, username, notifications, onAdd, onEdit, onDelete, scheduleNotifications, onSignOut }) => {
   let _settingsModal = null;
   const _setSettingsModalRef = element => _settingsModal = element;
 
-  const _handleSettingsClick = () => _settingsModal.show(daily);
+  const _handleSettingsClick = () => _settingsModal.show(notifications);
 
   function _renderHeader() {
     const settingsIcon = <ActionIcon
@@ -96,9 +98,12 @@ ListScreen.propTypes = {
   username: PropTypes.string.isRequired,
 
   /**
-   * Whether the notifications are daily scheduled
+   * The notifications schedule
    */
-  daily: PropTypes.bool.isRequired,
+  notifications: PropTypes.oneOf([
+    DAILY,
+    WEEKLY,
+  ]).isRequired,
 
   /**
    * The function to call when add button is tapped

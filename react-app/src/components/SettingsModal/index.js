@@ -7,6 +7,8 @@ import Logo from 'components/Logo';
 import RadioButton from 'components/RadioButton';
 import SettingsOptionLabel from 'components/SettingsOptionLabel';
 
+import { DAILY, WEEKLY } from 'notifications';
+
 import styles from './index.module.scss';
 
 export default class SettingsModal extends React.PureComponent {
@@ -17,7 +19,8 @@ export default class SettingsModal extends React.PureComponent {
     username: PropTypes.string.isRequired,
 
     /**
-     * The function to call when hide icon is tapped
+     * The function to call when hide icon is tapped. The notifications schedule
+     * will be passed as a param
      */
     onHide: PropTypes.func.isRequired,
 
@@ -29,15 +32,15 @@ export default class SettingsModal extends React.PureComponent {
 
   state = {
     visible: false,
-    daily: true,
+    notifications: DAILY,
   };
 
-  _setDailyNotifications = () => this.setState({ daily: true });
-  _setWeeklyNotifications = () => this.setState({ daily: false });
+  _setDailyNotifications = () => this.setState({ notifications: DAILY });
+  _setWeeklyNotifications = () => this.setState({ notifications: WEEKLY });
 
   _handleHide = () => {
     this.setState({ visible: false });
-    this.props.onHide(this.state.daily);
+    this.props.onHide(this.state.notifications);
   }
 
   _renderHeader() {
@@ -60,35 +63,35 @@ export default class SettingsModal extends React.PureComponent {
   }
 
   _renderMain() {
-    const { daily } = this.state;
+    const { notifications } = this.state;
 
-    const notifications = <SettingsOptionLabel
+    const notificationsLabel = <SettingsOptionLabel
       icon={SettingsOptionLabel.NOTIFICATION}
-      text={'Notifications'}
+      text="Notifications"
     />
 
-    const signOut = <SettingsOptionLabel
+    const signOutLabel = <SettingsOptionLabel
       icon={SettingsOptionLabel.SIGNOUT}
-      text={'Sign out'}
+      text="Sign out"
       onClick={this.props.onSignOut}
     />
 
     const radioButtonDaily = <RadioButton
-      label={"Daily"}
-      selected={daily}
+      label="Daily"
+      selected={notifications === DAILY}
       onClick={this._setDailyNotifications}
     />
 
     const radioButtonWeekly = <RadioButton
-      label={"Weekly"}
-      selected={!daily}
+      label="Weekly"
+      selected={notifications === WEEKLY}
       onClick={this._setWeeklyNotifications}
     />
 
     return (
       <div>
         <div>
-          {notifications}
+          {notificationsLabel}
         </div>
         <div className={styles.radioButtonsContainer}>
           <div>
@@ -99,16 +102,16 @@ export default class SettingsModal extends React.PureComponent {
           </div>
         </div>
         <div>
-          {signOut}
+          {signOutLabel}
         </div>
       </div>
     );
   }
 
-  show(daily) {
+  show(notifications) {
     this.setState({
       visible: true,
-      daily,
+      notifications,
     });
   }
 
