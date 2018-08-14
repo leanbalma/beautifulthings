@@ -6,12 +6,18 @@ import BaseScreen from 'components/BaseScreen';
 import Button from 'components/Button';
 import Header from 'components/Header';
 import ListItem from 'components/ListItem';
+import SettingsModal from 'components/SettingsModal';
 import Welcome from 'components/Welcome';
+
+import { DAILY, WEEKLY } from 'notifications';
 
 import styles from './index.module.scss';
 
-const ListScreen = ({ entries, onAdd, onEdit, onDelete }) => {
-  const _handleSettingsClick = () => { /* TODO: Implement */ }
+const ListScreen = ({ entries, username, notifications, onAdd, onEdit, onDelete, scheduleNotifications, onSignOut }) => {
+  let _settingsModal = null;
+  const _setSettingsModalRef = element => _settingsModal = element;
+
+  const _handleSettingsClick = () => _settingsModal.show(notifications);
 
   function _renderHeader() {
     const settingsIcon = <ActionIcon
@@ -61,11 +67,19 @@ const ListScreen = ({ entries, onAdd, onEdit, onDelete }) => {
   );
 
   return (
-    <BaseScreen
-      header={header}
-      main={main}
-      footer={footer}
-    />
+    <div>
+      <SettingsModal
+        username={username}
+        onHide={scheduleNotifications}
+        onSignOut={onSignOut}
+        ref={_setSettingsModalRef}
+      />
+      <BaseScreen
+        header={header}
+        main={main}
+        footer={footer}
+      />
+    </div>
   );
 }
 
@@ -77,6 +91,19 @@ ListScreen.propTypes = {
     date: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
   })).isRequired,
+
+  /**
+   * The name of the user
+   */
+  username: PropTypes.string.isRequired,
+
+  /**
+   * The notifications schedule
+   */
+  notifications: PropTypes.oneOf([
+    DAILY,
+    WEEKLY,
+  ]).isRequired,
 
   /**
    * The function to call when add button is tapped
@@ -92,6 +119,16 @@ ListScreen.propTypes = {
    * The function to call when delete button is tapped over an entry
    */
   onDelete: PropTypes.func.isRequired,
+
+  /**
+   * The function to call to schedule notifications
+   */
+  scheduleNotifications: PropTypes.func.isRequired,
+
+  /**
+   * The function to call when sign out button is tapped
+   */
+  onSignOut: PropTypes.func.isRequired,
 };
 
 export default ListScreen;
