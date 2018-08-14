@@ -13,11 +13,9 @@ export default class DatePicker extends React.PureComponent {
     date: PropTypes.string.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = { datePicked: props.date };
-  }
+  state = {
+    datePicked: this.props.date,
+  };
 
   _handleChange = event => {
     const newDatePicked = event.target.value;
@@ -33,8 +31,11 @@ export default class DatePicker extends React.PureComponent {
 
     return (
       <div>
-        <label className={styles.label}>When?</label>
+        <label className={styles.label}>
+          When?
+        </label>
         <input
+          className={styles.input}
           type="date"
           max={maxDate}
           value={this.state.datePicked}
