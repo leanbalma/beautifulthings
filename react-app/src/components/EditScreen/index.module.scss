@@ -1,0 +1,32 @@
+@import 'styles/colors.scss';
+
+.headerBackground {
+  background-color: $violet;
+}
+
+.main {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 30px;
+  @media screen and (min-width: 400px) {
+    padding: 0 50px;
+  }
+
+  & > div:not(:last-child) {
+    margin-bottom: 30px;
+  }
+}
+
+.buttonContainer {
+  width: 160px;
+  align-self: center;
+  display: inline-block;
+}
+
+.applyButton {
+  height: 70px;
+  padding: 0 20px;
+  background: url('./ApplyButton.svg') center center/contain no-repeat content-box;
+}
