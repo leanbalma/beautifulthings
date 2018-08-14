@@ -1,11 +1,34 @@
-.container {
-  display: flex;
-  flex-direction: column;
+@import 'styles/colors.scss';
+@import 'styles/fonts.scss';
+
+$fontFamily: BariolRegular;
+
+.label {
+  display: block;
+  color: $orange;
+  font-size: 20px;
+  font-family: $fontFamily;
+  margin-bottom: 2px;
 }
 
-.label { font-size: 14px; }
+.textArea {
+  width: 100%;
+  height: 175px;
+  color: $darkGray;
+  font-size: 20px;
+  font-family: $fontFamily;
+  padding: 0 10px;
+  border-radius: 10px;
+  border: 2px solid $lightGray;
+  outline: none;
+  box-sizing: border-box;
+}
 
 .charCounter {
-  font-size: 14px;
+  width: 100%;
+  color: $darkGray;
   text-align: right;
+  font-size: 16px;
+  font-family: $fontFamily;
+  margin-top: 2px;
 }

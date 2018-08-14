@@ -13,10 +13,8 @@ export default class TextArea extends React.PureComponent {
     text: PropTypes.string.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = { currentText: props.text }
+  state = {
+    currentText: this.props.text,
   }
 
   _setTextAreaRef = element => this._textArea = element;
@@ -32,19 +30,23 @@ export default class TextArea extends React.PureComponent {
   getText = () => this.state.currentText;
 
   render() {
-    const { currentText } = this.state;
+    const charCount = this.state.currentText.length;
+    const charCountLabel = `${charCount}/${TextArea.MAX_LENGTH}`;
 
     return (
-      <div className={styles.container}>
-        <label className={styles.label}>What?</label>
+      <div>
+        <label className={styles.label}>
+          What?
+        </label>
         <textarea
-          value={currentText}
+          className={styles.textArea}
+          value={this.state.currentText}
           onChange={this._handleChange}
           ref={this._setTextAreaRef}
         />
-        <span className={styles.charCounter}>
-          {currentText.length}/{TextArea.MAX_LENGTH}
-        </span>
+        <div className={styles.charCounter}>
+          {charCountLabel}
+        </div>
       </div>
     );
   }
