@@ -10,7 +10,7 @@ function setNotifications(schedule = DAILY) {
 
   const notification = {
     id: schedule,
-    title: 'BeautifulThingsApp',
+    title: 'Beautiful Things',
     text: 'What\'s your beautiful thing today?',
     icon: 'res://icon',
     vibrate: true,
