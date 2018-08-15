@@ -1,4 +1,5 @@
 import Account from 'account';
+import * as keystore from 'keystore';
 import { createEntry } from 'utils/entry';
 
 const _HOST = 'http://localhost/';
@@ -51,7 +52,13 @@ class Api {
     const encryptedToken = receivedJson.EncryptedToken;
     this._token = this._account.decrypt(encryptedToken);
 
+    await this._saveAccountData();
+
     return true;
+  }
+
+  async signOut() {
+    await this._clearAccountSavedData();
   }
 
   async addEntry(entry) {
@@ -77,6 +84,54 @@ class Api {
     const decryptedEntries = encryptedEntries.map(this._decryptReceivedEntry);
 
     return decryptedEntries;
+  }
+
+  async _saveAccountData() {
+    try {
+      const serializedAccount = this._account.serialize();
+
+      await keystore.init();
+      await keystore.set('token', this._token);
+      await keystore.set('account', serializedAccount);
+    } catch (error) {
+      /* Nothing here. If the account data cannot be saved, the app works normally without this feature */
+    }
+  }
+
+  async _clearAccountSavedData() {
+    try {
+      await keystore.init();
+      await keystore.clear();
+    } catch (error) {
+      /* Nothing here. If the account data cannot be deleted, the app works normally without this feature */
+    }
+  }
+
+  async initSavedAccount() {
+    let savedAccountSuccessfulyInitialized = false;
+
+    try {
+      await keystore.init();
+      const savedToken = await keystore.get('token');
+      const serializedSavedAccount = await keystore.get('account');
+
+      const deserializedSavedAccount = JSON.parse(serializedSavedAccount);
+
+      const savedAccountUsername = deserializedSavedAccount.username;
+      const savedAccountKeyPair = {
+        publicKey: Uint8Array.from(deserializedSavedAccount.publicKey),
+        secretKey: Uint8Array.from(deserializedSavedAccount.secretKey),
+      };
+
+      this._token = savedToken;
+      this.initAccount(savedAccountUsername, savedAccountKeyPair);
+
+      savedAccountSuccessfulyInitialized = true;
+    } catch (error) {
+      /* Nothing here. If the account data cannot be loaded, the app works normally and user must signin */
+    }
+
+    return savedAccountSuccessfulyInitialized;
   }
 }
 
