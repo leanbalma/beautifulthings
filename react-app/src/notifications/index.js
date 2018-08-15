@@ -5,11 +5,11 @@ const SUNDAY_WEEKDAY = 7;
 
 function _showAddScreen() { /** TODO */ }
 
-function setNotifications(shcedule = DAILY) {
+function setNotifications(schedule = DAILY) {
   if (!window.cordova) return;
 
   const notification = {
-    id: shcedule,
+    id: schedule,
     title: 'BeautifulThingsApp',
     text: 'What\'s your beautiful thing today?',
     icon: 'res://icon',
@@ -23,7 +23,7 @@ function setNotifications(shcedule = DAILY) {
     }
   }
 
-  if (shcedule === WEEKLY) notification.trigger.every.weekday = SUNDAY_WEEKDAY;
+  if (schedule === WEEKLY) notification.trigger.every.weekday = SUNDAY_WEEKDAY;
 
   return new Promise(resolve => {
     const callback = () => {
