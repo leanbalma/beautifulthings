@@ -22,10 +22,11 @@ class Account {
       const hashedPassword = sha256(nacl.util.decodeUTF8(password));
       const salt = sha256(nacl.util.decodeUTF8(username));
       const options = {
-        N: 1 << 20,
+        N: 1 << 16,
         r: 8,
         p: 1,
         dkLen: 32,
+        interruptStep: 10,
         encoding: 'binary'
       };
 
