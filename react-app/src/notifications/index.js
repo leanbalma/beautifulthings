@@ -43,17 +43,16 @@ function clearNotifications() {
 }
 
 function getSchedule() {
-  if (!window.cordova) return true;
+  let scheduledNotificationId = DAILY;
+
+  if (!window.cordova) return scheduledNotificationId;
 
   return new Promise(resolve => {
-    const processNotificationsArray = notifications => {
-      let scheduledNotificationId = null;
-      if (notifications.length) scheduledNotificationId = notifications[0];
+    window.cordova.plugins.notification.local.getIds(notificationsArray => {
+      if (notificationsArray.length) scheduledNotificationId = +notificationsArray[0];
 
       resolve(scheduledNotificationId);
-    }
-
-    window.cordova.plugins.notification.local.getIds(processNotificationsArray);
+    });
   });
 }
 
