@@ -47,64 +47,36 @@ export default class BaseUserPassScreen extends React.PureComponent {
   _setPasswordInputRef = element => this._passwordInput = element;
 
   _handleUsernameEnter = () => this._passwordInput.focus();
-  _handlePasswordEnter = () => {
-    const { onPasswordEnter } = this.props;
-
-    if (onPasswordEnter) onPasswordEnter();
-  }
-
-  _getUsernameInput() {
-    const { onUsernameChange, usernameError } = this.props;
-
-    return (
-      <InputText
-        type={InputText.TEXT}
-        label="Username"
-        errorMessage={usernameError}
-        onChange={onUsernameChange}
-        onEnter={this._handleUsernameEnter}
-        ref={this._setUsernameInputRef}
-      />
-    );
-  }
-
-  _getPasswordInput() {
-    const { onPasswordChange, passwordError } = this.props;
-
-    return (
-      <InputText
-        type={InputText.PASSWORD}
-        label="Password"
-        errorMessage={passwordError}
-        onChange={onPasswordChange}
-        onEnter={this._handlePasswordEnter}
-        ref={this._setPasswordInputRef}
-      />
-    );
-  }
+  _handlePasswordEnter = () => this.props.onPasswordEnter ? this.props.onPasswordEnter() : null;
 
   render() {
-    const logo = Logo();
-    const usernameInput = this._getUsernameInput();
-    const passwordInput = this._getPasswordInput();
+    const { onUsernameChange, usernameError, onPasswordChange, passwordError, children } = this.props;
 
     return (
       <div className={styles.container}>
         <div className={styles.mainContainer}>
           <div className={styles.logoContainer}>
-            {logo}
+            <Logo />
           </div>
           <div className={styles.space} />
           <div className={styles.formContainer}>
-            <div>
-              {usernameInput}
-            </div>
-            <div>
-              {passwordInput}
-            </div>
-            <div>
-              {this.props.children}
-            </div>
+            <InputText
+              type={InputText.TEXT}
+              label="Username"
+              errorMessage={usernameError}
+              onChange={onUsernameChange}
+              onEnter={this._handleUsernameEnter}
+              ref={this._setUsernameInputRef}
+            />
+            <InputText
+              type={InputText.PASSWORD}
+              label="Password"
+              errorMessage={passwordError}
+              onChange={onPasswordChange}
+              onEnter={this._handlePasswordEnter}
+              ref={this._setPasswordInputRef}
+            />
+            {children}
           </div>
         </div>
       </div>
