@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Account from 'account';
 
-import BaseUserPassScreen from 'containers/BaseUserPassScreen';
+import BaseUserPassScreen from 'components/BaseUserPassScreen';
 import Button from 'components/Button';
 import ButtonsModal from 'components/ButtonsModal';
 
