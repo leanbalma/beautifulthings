@@ -78,7 +78,10 @@ class Api {
     encryptedEntries.forEach(entry => {
       const decryptedText = this._account.decrypt(entry.Content);
 
-      if (decryptedText.length) decryptedEntries.push(createEntry(entry.Date, decryptedText));
+      if (decryptedText) {
+        const decryptedEntry = createEntry(entry.Date, decryptedText);
+        decryptedEntries.push(decryptedEntry);
+      }
     });
 
     return decryptedEntries;
