@@ -3,19 +3,14 @@ import ReactDOM from 'react-dom';
 
 import LoadingModal from 'components/LoadingModal';
 
-const container = document.getElementById('spinner');
+const spinnerNode = document.getElementById('spinner');
 
-function showLoadingModal(message = 'Loading...') {
-  const modal = <LoadingModal
-    visible={true}
-    message={message}
-  />;
-
-  ReactDOM.render(modal, container);
+function showLoadingModal(message = 'Loading') {
+  ReactDOM.render(<LoadingModal message={message} />, spinnerNode);
 }
 
 function hideLoadingModal() {
-  ReactDOM.unmountComponentAtNode(container);
+  ReactDOM.unmountComponentAtNode(spinnerNode);
 }
 
 export { showLoadingModal, hideLoadingModal }
