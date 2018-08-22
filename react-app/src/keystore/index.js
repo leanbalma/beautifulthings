@@ -2,12 +2,9 @@ let storage = null;
 
 function init() {
   return new Promise((resolve, reject) => {
-    const onSuccess = () => resolve();
-    const onError = error => reject(error);
-
     storage = new window.cordova.plugins.SecureStorage(
-      onSuccess,
-      onError,
+      resolve,
+      reject,
       'BeautifulThings'
     );
   });
@@ -15,12 +12,9 @@ function init() {
 
 function set(key, value) {
   return new Promise((resolve, reject) => {
-    const onSuccess = () => resolve();
-    const onError = error => reject(error);
-
     storage.set(
-      onSuccess,
-      onError,
+      resolve,
+      reject,
       key,
       value
     );
@@ -29,12 +23,9 @@ function set(key, value) {
 
 function get(key) {
   return new Promise((resolve, reject) => {
-    const onSuccess = value => resolve(value);
-    const onError = error => reject(error);
-
     storage.get(
-      onSuccess,
-      onError,
+      resolve,
+      reject,
       key
     );
   });
@@ -42,12 +33,9 @@ function get(key) {
 
 function clear() {
   return new Promise((resolve, reject) => {
-    const onSuccess = () => resolve();
-    const onError = error => reject(error);
-
     storage.clear(
-      onSuccess,
-      onError
+      resolve,
+      reject
     );
   });
 }
