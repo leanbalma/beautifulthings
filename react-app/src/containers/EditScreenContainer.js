@@ -59,6 +59,11 @@ class EditScreenContainer extends React.PureComponent {
   }
 
   _onSave = async (date, text) => {
+    if (!text) {
+      // TODO: Show an alert
+      return;
+    }
+
     try {
       showLoadingModal('Saving...');
       const edited = await editEntryAsync(date, text)(this.props.dispatch);
