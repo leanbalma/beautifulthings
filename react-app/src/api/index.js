@@ -78,15 +78,23 @@ class Api {
     return response.ok;
   }
 
-  _decryptReceivedEntry = entry => createEntry(entry.Date, this._account.decrypt(entry.Content));
-
   async getEntries(from, to) {
     const response = await this._get(`things/${from}/${to}`);
 
     if (!response.ok) throw new ErrorCannotGetEntries();
 
     const encryptedEntries = await response.json();
-    const decryptedEntries = encryptedEntries.map(this._decryptReceivedEntry);
+    if (!encryptedEntries) return [];
+
+    const decryptedEntries = [];
+    encryptedEntries.forEach(entry => {
+      const decryptedText = this._account.decrypt(entry.Content);
+
+      if (decryptedText) {
+        const decryptedEntry = createEntry(entry.Date, decryptedText);
+        decryptedEntries.push(decryptedEntry);
+      }
+    });
 
     return decryptedEntries;
   }
