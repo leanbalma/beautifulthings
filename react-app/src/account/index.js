@@ -55,6 +55,17 @@ class Account {
     });
   }
 
+  serialize() {
+    const publicKey = Array.from(this._pk);
+    const secretKey = Array.from(this._sk);
+
+    return JSON.stringify({
+      username: this._username,
+      publicKey,
+      secretKey,
+    });
+  }
+
   _generateNonce(publicKeyA, publicKeyB) {
     const nonceComputeLength = 32;
     const nonceExpectedLength = 24;
