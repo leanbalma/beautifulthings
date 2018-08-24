@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/fontawesome-free-solid';
@@ -7,29 +7,24 @@ import BaseModal from 'components/BaseModal';
 
 import styles from './index.module.scss';
 
-export default class LoadingModal extends PureComponent {
-  static propTypes = {
-    /**
-     * Whenever the modal is visible or not
-     */
-    visible: PropTypes.bool.isRequired,
-
-    /**
-     * The message that the modal will show
-     */
-    message: PropTypes.string.isRequired,
-  };
-
-  render() {
-    return (
-      <BaseModal visible={this.props.visible}>
-        <div className={styles.container}>
-          <FontAwesomeIcon icon={faSpinner} pulse />
-          <div>
-            {this.props.message}
-          </div>
+const LoadingModal = ({ message }) => {
+  return (
+    <BaseModal visible>
+      <div className={styles.container}>
+        <FontAwesomeIcon icon={faSpinner} pulse />
+        <div>
+          {message}
         </div>
-      </BaseModal>
-    );
-  }
+      </div>
+    </BaseModal>
+  );
 }
+
+LoadingModal.propTypes = {
+  /**
+   * The message that the modal will show
+   */
+  message: PropTypes.string.isRequired,
+};
+
+export default LoadingModal;

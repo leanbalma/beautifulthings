@@ -1,6 +1,20 @@
+@import 'styles/colors.scss';
+@import 'styles/fonts.scss';
+
 .container {
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: white;
+  width: 80%;
+  padding: 10px;
+  color: white;
+  font-size: 25px;
+  font-family: BariolRegular;
+  border-radius: 10px;
+  background-color: $violet;
+
+  & > :last-child {
+    font-size: 20px;
+    padding-top: 20px;
+  }
 }
