@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { editEntryAsync } from 'actions/entriesByDate';
 
 import { changeHash, SCREENS_HASHES } from 'AppRouter';
+import { showAlertModal } from 'utils/alertModal';
 import { showLoadingModal, hideLoadingModal } from 'utils/spinner';
 
 import Button from 'components/Button';
@@ -60,7 +61,7 @@ class EditScreenContainer extends React.PureComponent {
 
   _onSave = async (date, text) => {
     if (!text) {
-      // TODO: Show an alert
+      showAlertModal('The text entry cannot be empty');
       return;
     }
 
@@ -69,9 +70,9 @@ class EditScreenContainer extends React.PureComponent {
       const edited = await editEntryAsync(date, text)(this.props.dispatch);
 
       if (edited) this._goBack();
-      else { /** TODO: Show an alert */ }
+      else showAlertModal('Cannot save the entry');
     } catch (error) {
-      /** TODO: Show an alert */
+      showAlertModal('Cannot connect to the server');
     } finally {
       hideLoadingModal();
     }
