@@ -5,8 +5,10 @@ import { connect } from 'react-redux';
 import { scheduleNotifications, signOut } from 'actions/account';
 import { retrieveEntriesAsync, deleteEntryAsync } from 'actions/entriesByDate';
 
-import { changeHash, SCREENS_HASHES } from 'AppRouter';
+import { setNotifications, clearNotifications } from 'notifications';
 
+import { changeHash, SCREENS_HASHES } from 'AppRouter';
+import { showAlertModal } from 'utils/alertModal';
 import { getCurrentDateString } from 'utils/date';
 import { createEntry } from 'utils/entry';
 import { showLoadingModal, hideLoadingModal } from 'utils/spinner';
@@ -57,7 +59,7 @@ class ListScreenContainer extends React.PureComponent {
         const currentDate = getCurrentDateString();
         await retrieveEntriesAsync('2018-01-01', currentDate)(this.props.dispatch);
       } catch (error) {
-        /** TODO: Show an alert */
+        showAlertModal('Cannot connect to the server');
       } finally {
         hideLoadingModal();
       }
@@ -80,9 +82,9 @@ class ListScreenContainer extends React.PureComponent {
       showLoadingModal('Deleting');
       const deleted = await deleteEntryAsync(this.state.dateOfEntryToDelete)(this.props.dispatch);
 
-      if (!deleted) { /** TODO: Show an alert */ }
+      if (!deleted) showAlertModal('Cannot delete entry');
     } catch (error) {
-      /** TODO: Show an alert */
+      showAlertModal('Cannot connect to the server');
     } finally {
       hideLoadingModal();
       this._unsetDateOfEntryToDelete();
@@ -90,12 +92,12 @@ class ListScreenContainer extends React.PureComponent {
   }
 
   _scheduleNotifications = notifications => {
-    // TODO: Schedule notifications
+    setNotifications(notifications);
     this.props.dispatch(scheduleNotifications(notifications));
   }
 
   _onSignOut = () => {
-    // TODO: cancel notifications
+    clearNotifications();
     this.props.dispatch(signOut());
     changeHash(SCREENS_HASHES.start);
   }
