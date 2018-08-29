@@ -1,0 +1,16 @@
+{
+  "ios": {
+      "release": {
+          "codeSignIdentity": "iPhone Developer",
+          "developmentTeam": "UNIXONO COOP LTDA",
+          "packageType": "app-store",
+          "automaticProvisioning": true
+      },
+      "debug": {
+          "codeSignIdentity": "iPhone Developer",
+          "developmentTeam": "UNIXONO COOP LTDA",
+          "packageType": "development",
+          "automaticProvisioning": true
+      }
+  }
+}
