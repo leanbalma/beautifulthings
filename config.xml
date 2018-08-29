@@ -29,28 +29,28 @@
   <platform name="ios">
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
-    <icon src="res/icon/ios/Icon-App-20x20@1x.png" />
-    <icon src="res/icon/ios/Icon-App-20x20@2x.png" />
-    <icon src="res/icon/ios/Icon-App-20x20@3x.png" />
-    <icon src="res/icon/ios/Icon-App-29x29@1x.png" />
-    <icon src="res/icon/ios/Icon-App-29x29@2x.png" />
-    <icon src="res/icon/ios/Icon-App-29x29@3x.png" />
-    <icon src="res/icon/ios/Icon-App-40x40@1x.png" />
-    <icon src="res/icon/ios/Icon-App-40x40@2x.png" />
-    <icon src="res/icon/ios/Icon-App-40x40@3x.png" />
-    <icon src="res/icon/ios/Icon-App-57x57@1x.png" />
-    <icon src="res/icon/ios/Icon-App-57x57@2x.png" />
-    <icon src="res/icon/ios/Icon-App-60x60@1x.png" />
-    <icon src="res/icon/ios/Icon-App-60x60@2x.png" />
-    <icon src="res/icon/ios/Icon-App-60x60@3x.png" />
-    <icon src="res/icon/ios/Icon-App-72x72@1x.png" />
-    <icon src="res/icon/ios/Icon-App-72x72@2x.png" />
-    <icon src="res/icon/ios/Icon-App-76x76@1x.png" />
-    <icon src="res/icon/ios/Icon-App-76x76@2x.png" />
-    <icon src="res/icon/ios/Icon-App-76x76@3x.png" />
-    <icon src="res/icon/ios/Icon-App-83.5x83.5@2x.png" />
-    <icon src="res/icon/ios/Icon-Small-50x50@1x.png" />
-    <icon src="res/icon/ios/Icon-Small-50x50@2x.png" />
+    <icon src="res/icon/ios/icon-20.png" width="20" height="20"/>
+    <icon src="res/icon/ios/icon-20@2x.png" width="40" height="40"/>
+    <icon src="res/icon/ios/icon-20@3x.png" width="60" height="60"/>
+    <icon src="res/icon/ios/icon-29.png" width="29" height="29"/>
+    <icon src="res/icon/ios/icon-29@2x.png" width="58" height="58"/>
+    <icon src="res/icon/ios/icon-29@3x.png" width="87" height="87"/>
+    <icon src="res/icon/ios/icon-40.png" width="40" height="40"/>
+    <icon src="res/icon/ios/icon-40@2x.png" width="80" height="80"/>
+    <icon src="res/icon/ios/icon-40@3x.png" width="120" height="120"/>
+    <icon src="res/icon/ios/icon-57.png" width="57" height="57"/>
+    <icon src="res/icon/ios/icon-57@2x.png" width="114" height="114"/>
+    <icon src="res/icon/ios/icon-60.png" width="60" height="60"/>
+    <icon src="res/icon/ios/icon-60@2x.png" width="120" height="120"/>
+    <icon src="res/icon/ios/icon-60@3x.png" width="180" height="180"/>
+    <icon src="res/icon/ios/icon-72.png" width="72" height="72"/>
+    <icon src="res/icon/ios/icon-72@2x.png" width="144" height="144"/>
+    <icon src="res/icon/ios/icon-76.png" width="76" height="76"/>
+    <icon src="res/icon/ios/icon-76@2x.png" width="152" height="152"/>
+    <icon src="res/icon/ios/icon-76@3x.png" width="228" height="228"/>
+    <icon src="res/icon/ios/icon-83.5@2x.png" width="167" height="167"/>
+    <icon src="res/icon/ios/icon-50.png" width="50" height="50"/>
+    <icon src="res/icon/ios/icon-50@2x.png" width="100" height="100"/>
     <splash src="res/screen/ios/Default@2x~iphone.png" width="640" height="960"/>
     <splash src="res/screen/ios/Default-568h@2x~iphone.png" width="640" height="1136"/>
     <splash src="res/screen/ios/Default-667h.png" width="750" height="1334"/>
