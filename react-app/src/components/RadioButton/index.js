@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames/bind';
 
 import styles from './index.module.scss';
@@ -17,7 +18,7 @@ const RadioButton = ({ label, selected, onClick }) => {
         <div className={innerCircleStyle} />
       </div>
       <div>
-        {label}
+        <FormattedMessage id={label} />
       </div>
     </label>
   );
