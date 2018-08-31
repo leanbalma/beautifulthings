@@ -15,5 +15,9 @@
   "When?": "¿Cuándo?",
   "What?": "¿Qué?",
   "Delete": "Eliminar",
-  "Edit": "Editar"
+  "Edit": "Editar",
+  "Signing in": "Ingresando",
+  "Cannot connect to the server": "Sin conexión con el servidor",
+  "Wrong username or password": "Usuario o contraseña incorrecto",
+  "Close": "Cerrar"
 }
