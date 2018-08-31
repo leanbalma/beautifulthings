@@ -2,5 +2,8 @@
   "Username": "Usuario",
   "Password": "Contraseña",
   "Username is too short": "Nombre de usuario demasiado corto",
-  "Password is too short": "Contraseña demasiado corto"
+  "Password is too short": "Contraseña demasiado corto",
+  "Sign in": "Iniciar sesión",
+  "Create your account": "Crear tu cuenta",
+  "Sign up": "Registrarse"
 }
