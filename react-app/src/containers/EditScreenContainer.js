@@ -47,6 +47,14 @@ class EditScreenContainer extends React.PureComponent {
     }
   }
 
+  componentDidMount() {
+    document.addEventListener("backbutton", this._onBack);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("backbutton", this._onBack);
+  }
+
   _toggleDiscardCangesModalVisibility = () => {
     this.setState({ discardChangesModalVisible: !this.state.discardChangesModalVisible });
   }
