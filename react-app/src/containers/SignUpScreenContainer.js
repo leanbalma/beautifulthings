@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 
 import { signUpAsync } from 'actions/account';
 
@@ -26,13 +27,13 @@ class SignUpScreenContainer extends React.PureComponent {
 
   _signUp = async (username, password) => {
     try {
-      showLoadingModal('Signing up...');
+      showLoadingModal("Signing up");
       const signedUp = await signUpAsync(username, password);
 
       if (signedUp) this.setState({ signedUpModalVisible: true });
-      else showAlertModal('There was an error creating your account. Try again later, or try with a different username.');
+      else showAlertModal("There was an error creating your account. Try again later, or try with a different username.");
     } catch (error) {
-      showAlertModal('Cannot connect to the server');
+      showAlertModal("Cannot connect to the server");
     } finally {
       hideLoadingModal();
     }
@@ -43,7 +44,7 @@ class SignUpScreenContainer extends React.PureComponent {
   render() {
     const modalButton = (
       <Button onClick={this._onSignIn} small>
-        Sign in
+        <FormattedMessage id="Sign in" />
       </Button>
     );
 
