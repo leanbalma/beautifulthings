@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { signInAsync } from 'actions/account';
 
 import { changeHash, SCREENS_HASHES } from 'AppRouter';
+import { showAlertModal } from 'utils/alertModal';
 import { showLoadingModal, hideLoadingModal } from 'utils/spinner';
 
 import StartScreen from 'components/StartScreen';
@@ -33,9 +34,9 @@ class StartScreenContainer extends React.PureComponent {
       const signedIn = await signInAsync(username, password)(this.props.dispatch);
 
       if (signedIn) changeHash(SCREENS_HASHES.list);
-      else { /** TODO: Alert: Wrong username or password */ }
+      else showAlertModal('Wrong username or password');
     } catch (error) {
-      /** TODO: Alert: Cannot connect to server */
+      showAlertModal('Cannot connect to the server');
     } finally {
       hideLoadingModal();
     }

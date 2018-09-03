@@ -1,9 +1,16 @@
+import { changeHash, SCREENS_HASHES } from 'AppRouter';
+import { getCurrentDateString } from 'utils/date';
+
 const DAILY = 1;
 const WEEKLY = 2;
 
 const SUNDAY_WEEKDAY = 7;
 
-function _showAddScreen() { /** TODO */ }
+function _showAddScreen() {
+  const currentDate = getCurrentDateString();
+
+  changeHash(SCREENS_HASHES.edit(currentDate));
+}
 
 function setNotifications(schedule = DAILY) {
   if (!window.cordova) return;
