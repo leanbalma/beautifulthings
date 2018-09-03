@@ -1,10 +1,20 @@
 import { changeHash, SCREENS_HASHES } from 'AppRouter';
 import { getCurrentDateString } from 'utils/date';
 
+import es from 'locale/es';
+
 const DAILY = 1;
 const WEEKLY = 2;
 
 const SUNDAY_WEEKDAY = 7;
+
+const language = navigator.language.split(/[-_]/)[0];
+
+const NOTIFICATION_ID = "What’s your beautiful thing today?";
+const NOTIFICATIONS_TITLE = {
+  en: NOTIFICATION_ID,
+  es: es[NOTIFICATION_ID],
+}
 
 function _showAddScreen() {
   const currentDate = getCurrentDateString();
@@ -15,10 +25,11 @@ function _showAddScreen() {
 function setNotifications(schedule = DAILY) {
   if (!window.cordova) return;
 
+  const text = NOTIFICATIONS_TITLE[language] || NOTIFICATION_ID;
   const notification = {
     id: schedule,
     title: 'Beautiful Things',
-    text: 'What\'s your beautiful thing today?',
+    text,
     icon: 'res://icon',
     vibrate: true,
     foreground: true,
