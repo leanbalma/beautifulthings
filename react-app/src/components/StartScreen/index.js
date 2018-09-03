@@ -85,13 +85,13 @@ export default class StartScreen extends React.PureComponent {
       >
         <div className={styles.container}>
           <Button onClick={this._signIn} disabled={!validForm}>
-            <FormattedMessage id={"Sign in"} />
+            <FormattedMessage id="Sign in" />
           </Button>
           <div className={styles.createAccountLabelContainer}>
-            - <FormattedMessage id={"Create your account"} /> -
+            - <FormattedMessage id="Create your account" /> -
           </div>
           <Button onClick={this.props.onSignUp}>
-            <FormattedMessage id={"Sign up"} />
+            <FormattedMessage id="Sign up" />
           </Button>
         </div>
       </BaseUserPassScreen>

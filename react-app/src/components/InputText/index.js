@@ -79,9 +79,10 @@ export default class InputText extends React.PureComponent {
 
   render() {
     const { label, type, placeholder, errorMessage } = this.props;
+    const { isPasswordVisible } = this.state;
 
-    const inputStyle = _classNames('text', { password: this.state.isPasswordVisible });
-    const inputType = (type !== InputText.PASSWORD || this.state.isPasswordVisible) ? InputText.TEXT : InputText.PASSWORD;
+    const inputStyle = _classNames('text', { password: isPasswordVisible });
+    const inputType = (type !== InputText.PASSWORD || isPasswordVisible) ? InputText.TEXT : InputText.PASSWORD;
 
     const icon = this._getInputIcon();
     const errorLabel = errorMessage ? <FormattedMessage id={errorMessage} /> : null;

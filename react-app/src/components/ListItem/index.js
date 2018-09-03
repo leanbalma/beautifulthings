@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedDate } from 'react-intl';
+import { FormattedMessage, FormattedDate } from 'react-intl';
 import classNames from 'classnames/bind';
 
 import ActionIcon from 'components/ActionIcon';
@@ -77,10 +77,10 @@ export default class ListItem extends React.PureComponent {
         </div>
         <div className={buttonsContainerStyle}>
           <Button onClick={this._handleDelete} small>
-            Delete
+            <FormattedMessage id="Delete" />
           </Button>
           <Button onClick={this._handleEdit} small>
-            Edit
+            <FormattedMessage id="Edit" />
           </Button>
         </div>
       </div>
