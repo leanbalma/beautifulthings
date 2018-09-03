@@ -15,6 +15,14 @@ class SignUpScreenContainer extends React.PureComponent {
     signedUpModalVisible: false,
   };
 
+  componentDidMount() {
+    document.addEventListener("backbutton", this._onSignIn);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("backbutton", this._onSignIn);
+  }
+
   _signUp = async (username, password) => {
     try {
       showLoadingModal('Signing up...');

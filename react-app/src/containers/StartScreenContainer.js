@@ -9,11 +9,28 @@ import { showLoadingModal, hideLoadingModal } from 'utils/spinner';
 
 import StartScreen from 'components/StartScreen';
 
-const StartScreenContainer = ({ dispatch }) => {
-  const _signIn = async (username, password) => {
+class StartScreenContainer extends React.PureComponent {
+  static propTypes = {
+    /**
+     * Redux dispatch function
+     */
+    dispatch: PropTypes.func.isRequired,
+  }
+
+  _closeApp = () => navigator.app.exitApp();
+
+  componentDidMount() {
+    document.addEventListener("backbutton", this._closeApp);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("backbutton", this._closeApp);
+  }
+
+  _signIn = async (username, password) => {
     try {
       showLoadingModal('Signing in...');
-      const signedIn = await signInAsync(username, password)(dispatch);
+      const signedIn = await signInAsync(username, password)(this.props.dispatch);
 
       if (signedIn) changeHash(SCREENS_HASHES.list);
       else { /** TODO: Alert: Wrong username or password */ }
@@ -24,19 +41,14 @@ const StartScreenContainer = ({ dispatch }) => {
     }
   }
 
-  const _onSignUp = () => changeHash(SCREENS_HASHES.signUp);
+  _onSignUp = () => changeHash(SCREENS_HASHES.signUp);
 
-  return <StartScreen
-    onSignIn={_signIn}
-    onSignUp={_onSignUp}
-  />;
-}
-
-StartScreenContainer.propTypes = {
-  /**
-   * Redux dispatch function
-   */
-  dispatch: PropTypes.func.isRequired,
+  render() {
+    return <StartScreen
+      onSignIn={this._signIn}
+      onSignUp={this._onSignUp}
+    />;
+  }
 }
 
 export default connect()(StartScreenContainer);

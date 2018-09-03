@@ -50,7 +50,11 @@ class ListScreenContainer extends React.PureComponent {
     dateOfEntryToDelete: null,
   }
 
+  _closeApp = () => navigator.app.exitApp();
+
   async componentDidMount() {
+    document.addEventListener("backbutton", this._closeApp);
+
     if (!this.props.entries.length) {
       try {
         showLoadingModal('Loading');
@@ -62,6 +66,10 @@ class ListScreenContainer extends React.PureComponent {
         hideLoadingModal();
       }
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("backbutton", this._closeApp);
   }
 
   _onAdd = () => {
