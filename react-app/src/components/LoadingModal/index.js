@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/fontawesome-free-solid';
 
@@ -13,7 +14,7 @@ const LoadingModal = ({ message }) => {
       <div className={styles.container}>
         <FontAwesomeIcon icon={faSpinner} pulse />
         <div>
-          {message}
+          <FormattedMessage id={message} />
         </div>
       </div>
     </BaseModal>

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 
 import { editEntryAsync } from 'actions/entriesByDate';
 
@@ -69,26 +70,34 @@ class EditScreenContainer extends React.PureComponent {
 
   _onSave = async (date, text) => {
     if (!text) {
-      showAlertModal('The text entry cannot be empty');
+      showAlertModal("Text entry cannot be empty");
       return;
     }
 
     try {
-      showLoadingModal('Saving...');
+      showLoadingModal("Saving");
       const edited = await editEntryAsync(date, text)(this.props.dispatch);
 
       if (edited) this._goBack();
-      else showAlertModal('Cannot save the entry');
+      else showAlertModal("Cannot save the entry");
     } catch (error) {
-      showAlertModal('Cannot connect to the server');
+      showAlertModal("Cannot connect to the server");
     } finally {
       hideLoadingModal();
     }
   }
 
   render() {
-    const discardChangesBtn = <Button onClick={this._goBack} small>Yes</Button>;
-    const avoidDiscardChangesBtn = <Button onClick={this._toggleDiscardCangesModalVisibility} small>No</Button>;
+    const discardChangesBtn = (
+      <Button onClick={this._goBack} small>
+        <FormattedMessage id="Yes" />
+      </Button>);
+
+    const avoidDiscardChangesBtn = (
+      <Button onClick={this._toggleDiscardCangesModalVisibility} small>
+        <FormattedMessage id="No" />
+      </Button>
+    );
 
     return (
       <div>

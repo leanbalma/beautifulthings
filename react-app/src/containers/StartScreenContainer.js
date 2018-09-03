@@ -30,13 +30,13 @@ class StartScreenContainer extends React.PureComponent {
 
   _signIn = async (username, password) => {
     try {
-      showLoadingModal('Signing in...');
+      showLoadingModal("Signing in");
       const signedIn = await signInAsync(username, password)(this.props.dispatch);
 
       if (signedIn) changeHash(SCREENS_HASHES.list);
-      else showAlertModal('Wrong username or password');
+      else showAlertModal("Wrong username or password");
     } catch (error) {
-      showAlertModal('Cannot connect to the server');
+      showAlertModal("Cannot connect to the server");
     } finally {
       hideLoadingModal();
     }
