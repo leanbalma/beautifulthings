@@ -1,11 +1,12 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import styles from './index.module.scss';
 
 const Welcome = () => {
   return (
     <div className={styles.container}>
-      What’s your beautiful thing today?
+      <FormattedMessage id="What’s your beautiful thing today?" />
     </div>
   );
 }

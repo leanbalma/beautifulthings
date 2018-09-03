@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import { isDateStringValid, getCurrentDateString } from 'utils/date';
 
@@ -32,7 +33,7 @@ export default class DatePicker extends React.PureComponent {
     return (
       <div>
         <label className={styles.label}>
-          When?
+          <FormattedMessage id="When?" />
         </label>
         <input
           className={styles.input}

@@ -1,0 +1,19 @@
+{
+  "Username": "Usuario",
+  "Password": "Contraseña",
+  "Username is too short": "Nombre de usuario demasiado corto",
+  "Password is too short": "Contraseña demasiado corta",
+  "Sign in": "Iniciar sesión",
+  "Create your account": "Crear tu cuenta",
+  "Sign up": "Registrarse",
+  "or sign in": "o iniciar sesión",
+  "What’s your beautiful thing today?": "¿Qué cosa hermosa te ha pasado hoy?",
+  "Notifications": "Notificaciones",
+  "Daily": "Diaria",
+  "Weekly": "Semanal",
+  "Sign out": "Salir",
+  "When?": "¿Cuándo?",
+  "What?": "¿Qué?",
+  "Delete": "Eliminar",
+  "Edit": "Editar"
+}

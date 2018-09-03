@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import styles from './index.module.scss';
 
@@ -36,7 +37,7 @@ export default class TextArea extends React.PureComponent {
     return (
       <div>
         <label className={styles.label}>
-          What?
+          <FormattedMessage id="What?" />
         </label>
         <textarea
           className={styles.textArea}

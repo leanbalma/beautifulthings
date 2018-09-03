@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import Account from 'account';
 
@@ -84,13 +85,13 @@ export default class StartScreen extends React.PureComponent {
       >
         <div className={styles.container}>
           <Button onClick={this._signIn} disabled={!validForm}>
-            Sign in
+            <FormattedMessage id="Sign in" />
           </Button>
           <div className={styles.createAccountLabelContainer}>
-            - Create your account -
+            - <FormattedMessage id="Create your account" /> -
           </div>
           <Button onClick={this.props.onSignUp}>
-            Sign up
+            <FormattedMessage id="Sign up" />
           </Button>
         </div>
       </BaseUserPassScreen>

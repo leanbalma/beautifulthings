@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames/bind';
 
 import styles from './index.module.scss';
@@ -64,63 +65,12 @@ export default class InputText extends React.PureComponent {
 
   _togglePasswordVisibility = () => this.setState({ isPasswordVisible: !this.state.isPasswordVisible });
 
-  _getLabel() {
-    const { label } = this.props;
-
-    if (!label) return null;
-
-    return (
-      <span>
-        {label}
-      </span>
-    );
-  }
-
   _getInputIcon = () => {
     if (this.props.type === InputText.TEXT) return null;
 
     const style = this.state.isPasswordVisible ? styles.hidePassword : styles.showPassword;
 
-    return (
-      <div
-        className={style}
-        onClick={this._togglePasswordVisibility}
-      />
-    );
-  }
-
-  _getInput() {
-    const { type, placeholder } = this.props;
-
-    const style = _classNames('text', {
-      password: this.state.isPasswordVisible,
-    });
-
-    let inputType = InputText.TEXT;
-    if (type === InputText.PASSWORD && !this.state.isPasswordVisible) inputType = InputText.PASSWORD;
-
-    return (
-      <input
-        className={style}
-        type={inputType}
-        placeholder={placeholder || ''}
-        onKeyDown={this._handleKeyDown}
-        onChange={this._handleChange}
-        ref={this._setInputRef}
-      />
-    );
-  }
-
-  _getErrorMessage() {
-    const { errorMessage } = this.props;
-
-    if (!errorMessage) return null;
-
-    return (
-      <span>
-        {errorMessage}
-      </span>
-    );
+    return <div className={style} onClick={this._togglePasswordVisibility} />
   }
 
   focus() {
@@ -128,22 +78,33 @@ export default class InputText extends React.PureComponent {
   }
 
   render() {
-    const label = this._getLabel();
-    const input = this._getInput();
+    const { label, type, placeholder, errorMessage } = this.props;
+    const { isPasswordVisible } = this.state;
+
+    const inputStyle = _classNames('text', { password: isPasswordVisible });
+    const inputType = (type !== InputText.PASSWORD || isPasswordVisible) ? InputText.TEXT : InputText.PASSWORD;
+
     const icon = this._getInputIcon();
-    const errorMessage = this._getErrorMessage();
+    const errorLabel = errorMessage ? <FormattedMessage id={errorMessage} /> : null;
 
     return (
       <div className={styles.container}>
         <div className={styles.labelContainer}>
-          {label}
+          <FormattedMessage id={label} />
         </div>
         <div className={styles.inputContainer}>
-          {input}
+          <input
+            className={inputStyle}
+            type={inputType}
+            placeholder={placeholder || ''}
+            onKeyDown={this._handleKeyDown}
+            onChange={this._handleChange}
+            ref={this._setInputRef}
+          />
           {icon}
         </div>
         <div className={styles.errorMessageContainer}>
-          {errorMessage}
+          {errorLabel}
         </div>
       </div>
     );
