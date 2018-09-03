@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import BaseModal from 'components/BaseModal';
 
@@ -35,7 +36,7 @@ const ButtonsModal = props => {
   const modalBody = (
     <div className={styles.container}>
       <div>
-        {message}
+        <FormattedMessage id={message} />
       </div>
       <div>
         {buttons}
