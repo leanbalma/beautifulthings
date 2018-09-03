@@ -22,7 +22,7 @@ class SignUpScreenContainer extends React.PureComponent {
       const signedUp = await signUpAsync(username, password);
 
       if (signedUp) this.setState({ signedUpModalVisible: true });
-      else showAlertModal('Username already exists');
+      else showAlertModal('There was an error creating your account. Try again later, or try with a different username.');
     } catch (error) {
       showAlertModal('Cannot connect to the server');
     } finally {
