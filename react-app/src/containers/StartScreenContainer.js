@@ -17,6 +17,16 @@ class StartScreenContainer extends React.PureComponent {
     dispatch: PropTypes.func.isRequired,
   }
 
+  _closeApp = () => navigator.app.exitApp();
+
+  componentDidMount() {
+    document.addEventListener("backbutton", this._closeApp);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("backbutton", this._closeApp);
+  }
+
   _signIn = async (username, password) => {
     try {
       showLoadingModal('Signing in...');
