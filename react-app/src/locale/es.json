@@ -20,7 +20,12 @@
   "Signing up": "Creando cuenta",
   "There was an error creating your account. Try again later, or try with a different username.": "Hubo un error creando su cuenta. Intente nuevamente luego o intente con un usuario diferente.",
   "Successful registration!": "¡Registrado exitosamente!",
+  "Loading": "Cargando",
+  "Deleting": "Eliminando",
   "Cannot connect to the server": "Sin conexión con el servidor",
   "Wrong username or password": "Usuario o contraseña incorrecto",
-  "Close": "Cerrar"
+  "Cannot delete entry": "No se pudo eliminar la entrada",
+  "Are you sure you want to delete this entry?": "¿Seguro quiere eliminar esta entrada?",
+  "Close": "Cerrar",
+  "Yes": "Sí"
 }

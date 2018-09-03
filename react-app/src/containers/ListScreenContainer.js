@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 
 import { scheduleNotifications, signOut } from 'actions/account';
 import { retrieveEntriesAsync, deleteEntryAsync } from 'actions/entriesByDate';
@@ -59,11 +60,11 @@ class ListScreenContainer extends React.PureComponent {
 
     if (!this.props.entries.length) {
       try {
-        showLoadingModal('Loading');
+        showLoadingModal("Loading");
         const currentDate = getCurrentDateString();
         await retrieveEntriesAsync('2018-01-01', currentDate)(this.props.dispatch);
       } catch (error) {
-        showAlertModal('Cannot connect to the server');
+        showAlertModal("Cannot connect to the server");
       } finally {
         hideLoadingModal();
       }
@@ -87,12 +88,12 @@ class ListScreenContainer extends React.PureComponent {
 
   _deleteEntry = async () => {
     try {
-      showLoadingModal('Deleting');
+      showLoadingModal("Deleting");
       const deleted = await deleteEntryAsync(this.state.dateOfEntryToDelete)(this.props.dispatch);
 
-      if (!deleted) showAlertModal('Cannot delete entry');
+      if (!deleted) showAlertModal("Cannot delete entry");
     } catch (error) {
-      showAlertModal('Cannot connect to the server');
+      showAlertModal("Cannot connect to the server");
     } finally {
       hideLoadingModal();
       this._unsetDateOfEntryToDelete();
@@ -114,8 +115,16 @@ class ListScreenContainer extends React.PureComponent {
     const { entries, entriesByDate, username, notifications } = this.props;
     const entriesList = entries.map(date => createEntry(date, entriesByDate[date]));
 
-    const deleteButton = <Button onClick={this._deleteEntry} small>Yes</Button>;
-    const doNotDeleteButton = <Button onClick={this._unsetDateOfEntryToDelete} small>No</Button>;
+    const deleteButton = (
+      <Button onClick={this._deleteEntry} small>
+        <FormattedMessage id="Yes" />
+      </Button>);
+
+    const doNotDeleteButton = (
+      <Button onClick={this._unsetDateOfEntryToDelete} small>
+        <FormattedMessage id="No" />
+      </Button>
+    );
 
     return (
       <div>
