@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import LocaleHOC from 'locale/LocaleHOC';
+
 import LoadingModal from 'components/LoadingModal';
 
 const spinnerNode = document.getElementById('spinner');
 
 function showLoadingModal(message = 'Loading') {
-  ReactDOM.render(<LoadingModal message={message} />, spinnerNode);
+  ReactDOM.render(LocaleHOC(<LoadingModal message={message} />), spinnerNode);
 }
 
 function hideLoadingModal() {
