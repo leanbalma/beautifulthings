@@ -10,7 +10,7 @@ import TextArea from 'components/TextArea';
 
 import styles from './index.module.scss';
 
-const EditScreen = ({ date, text, onBack, onSave }) => {
+const EditScreen = ({ date, text, onBack, onSave, onDateChange }) => {
   let _datePicker = null, _textArea = null;
   const _setDatePickerRef = element => _datePicker = element;
   const _setTextAreaRef = element => _textArea = element;
@@ -52,32 +52,25 @@ const EditScreen = ({ date, text, onBack, onSave }) => {
   }
 
   function _renderMain() {
-    const datePicker = <DatePicker
-      date={date}
-      ref={_setDatePickerRef}
-    />;
-
-    const textArea = <TextArea
-      text={text}
-      ref={_setTextAreaRef}
-    />;
-
-    const applyButton = (
-      <Button onClick={_handleSave}>
-        <div className={styles.applyButton} />
-      </Button>
-    );
-
     return (
       <div className={styles.main}>
         <div>
-          {datePicker}
+          <DatePicker
+            date={date}
+            onChange={onDateChange}
+            ref={_setDatePickerRef}
+          />
         </div>
         <div>
-          {textArea}
+          <TextArea
+            text={text}
+            ref={_setTextAreaRef}
+          />
         </div>
         <div className={styles.buttonContainer}>
-          {applyButton}
+          <Button onClick={_handleSave}>
+            <div className={styles.applyButton} />
+          </Button>
         </div>
       </div>
     );
@@ -112,6 +105,11 @@ EditScreen.propTypes = {
    * The function to call when save button is tapped
    */
   onSave: PropTypes.func.isRequired,
+
+  /**
+   * The function to call when the DatePicker's date changes.
+   */
+  onDateChange: PropTypes.func,
 };
 
 export default EditScreen;

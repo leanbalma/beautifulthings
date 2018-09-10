@@ -38,15 +38,8 @@ class EditScreenContainer extends React.PureComponent {
     dispatch: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-
-    this._initialDate = props.match.params.date;
-    this._initialText = props.entriesByDate[this._initialDate] || "";
-
-    this.state = {
-      discardChangesModalVisible: false,
-    }
+  state = {
+    discardChangesModalVisible: false,
   }
 
   componentDidMount() {
@@ -87,7 +80,11 @@ class EditScreenContainer extends React.PureComponent {
     }
   }
 
+  _onDateChange = date => changeHash(SCREENS_HASHES.edit(date));
+
   render() {
+    const { match, entriesByDate } = this.props;
+
     const discardChangesBtn = (
       <Button onClick={this._goBack} small>
         <FormattedMessage id="Yes" />
@@ -99,6 +96,11 @@ class EditScreenContainer extends React.PureComponent {
       </Button>
     );
 
+    const date = match.params.date;
+    const text = entriesByDate[date] || "";
+    this._initialDate = date;
+    this._initialText = text;
+
     return (
       <div>
         <ButtonsModal
@@ -108,10 +110,11 @@ class EditScreenContainer extends React.PureComponent {
           secondaryButton={avoidDiscardChangesBtn}
         />
         <EditScreen
-          date={this._initialDate}
-          text={this._initialText}
+          date={date}
+          text={text}
           onBack={this._onBack}
           onSave={this._onSave}
+          onDateChange={this._onDateChange}
         />
       </div>
     );
