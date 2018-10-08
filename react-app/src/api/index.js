@@ -155,9 +155,11 @@ class Api {
         publicKey: Uint8Array.from(deserializedSavedAccount.publicKey),
         secretKey: Uint8Array.from(deserializedSavedAccount.secretKey),
       };
+      const savedKey = Uint8Array.from(deserializedSavedAccount.key);
 
       this._token = savedToken;
       this.initAccount(savedAccountUsername, savedAccountKeyPair);
+      this._account.key = savedKey;
 
       savedAccountSuccessfulyInitialized = true;
     } catch (error) {
