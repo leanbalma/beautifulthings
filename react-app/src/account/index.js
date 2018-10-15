@@ -6,15 +6,33 @@ import { getTzOffset, getTzFromOffset } from 'utils/timezone';
 
 nacl.util = require('tweetnacl-util');
 
-class ErrorAuthenticationFail extends Error {}
+const KEY_LENGTH = 32;
+const NONCE_COMPUTE_LENGTH = 32;
+const NONCE_LENGTH = 24;
 
 class Account {
   static validateUsername(username) {
-    return username.length > 0;
+    return username.length;
   }
 
   static validatePassword(password) {
-    return password.length > 6;
+    return password.length;
+  }
+
+  static encodeBase64(uint8Array) {
+    return nacl.util.encodeBase64(uint8Array);
+  }
+
+  static encodeUTF8(plainText) {
+    return nacl.util.encodeUTF8(plainText);
+  }
+
+  static decodeBase64(uint8Array) {
+    return nacl.util.decodeBase64(uint8Array);
+  }
+
+  static decodeUTF8(plainText) {
+    return nacl.util.decodeUTF8(plainText);
   }
 
   static generateKeyPair(username, password) {
@@ -27,7 +45,7 @@ class Account {
         p: 1,
         dkLen: 32,
         interruptStep: 10,
-        encoding: 'binary'
+        encoding: 'binary',
       };
 
       const callback = (derivedKey) => {
@@ -42,15 +60,24 @@ class Account {
     this._username = username;
     this._pk = keyPair.publicKey;
     this._sk = keyPair.secretKey;
+    this._key = nacl.randomBytes(KEY_LENGTH);
     this._offset = getTzOffset();
     this._tz = getTzFromOffset(this._offset);
   }
 
+  set key(key) {
+    this._key = key;
+  }
+
   toString() {
     const pkAsArray = Array.from(this._pk);
+    const encryptedKey = this._encryptWithKeyPair(this._key);
+    const encryptedKeyAsArray = Array.from(encryptedKey);
+
     return JSON.stringify({
       Username: this._username,
       Pk: pkAsArray,
+      EncryptedKey: encryptedKeyAsArray,
       Tz: this._tz,
       Offset: this._offset
     });
@@ -59,51 +86,70 @@ class Account {
   serialize() {
     const publicKey = Array.from(this._pk);
     const secretKey = Array.from(this._sk);
+    const key = Array.from(this._key);
 
     return JSON.stringify({
       username: this._username,
       publicKey,
       secretKey,
+      key,
     });
   }
 
   _generateNonce(publicKeyA, publicKeyB) {
-    const nonceComputeLength = 32;
-    const nonceExpectedLength = 24;
-    let state = blake.blake2bInit(nonceComputeLength, null);
+    let state = blake.blake2bInit(NONCE_COMPUTE_LENGTH, null);
     blake.blake2bUpdate(state, publicKeyA);
     blake.blake2bUpdate(state, publicKeyB);
-    return blake.blake2bFinal(state).subarray(0, nonceExpectedLength);
+
+    return blake.blake2bFinal(state).subarray(0, NONCE_LENGTH);
   }
 
-  encrypt(plainText) {
-    const messageToEncrypt = nacl.util.decodeUTF8(plainText);
+  _encryptWithKeyPair(valueToEncrypt) {
     const ephemeralKeyPair = nacl.box.keyPair();
     const nonce = this._generateNonce(ephemeralKeyPair.publicKey, this._pk);
-    const cipherText
-      = nacl.box(messageToEncrypt, nonce, this._pk, ephemeralKeyPair.secretKey);
+    const cipherText = nacl.box(valueToEncrypt, nonce, this._pk, ephemeralKeyPair.secretKey);
 
     const output = new Uint8Array(nacl.box.publicKeyLength + cipherText.length);
     output.set(ephemeralKeyPair.publicKey);
     output.set(cipherText, nacl.box.publicKeyLength);
 
-    return nacl.util.encodeBase64(output);
+    return output;
   }
 
-  decrypt(cipherText) {
-    const input = nacl.util.decodeBase64(cipherText);
+  decryptWithKeyPair(cipherText) {
+    const input = Account.decodeBase64(cipherText);
     const originalEphemeralPublicKey = input.subarray(0, nacl.box.publicKeyLength);
 
     const nonce = this._generateNonce(originalEphemeralPublicKey, this._pk);
-    const encryptedMessage = input.subarray(nacl.box.publicKeyLength);
-    const decryptedMessage
-      = nacl.box.open(encryptedMessage, nonce, originalEphemeralPublicKey, this._sk);
+    const encryptedValue = input.subarray(nacl.box.publicKeyLength);
+    const decryptedValue = nacl.box.open(encryptedValue, nonce, originalEphemeralPublicKey, this._sk);
 
-    if (decryptedMessage === null) throw new ErrorAuthenticationFail();
+    if (!decryptedValue) throw new Error();
 
-    return nacl.util.encodeUTF8(decryptedMessage);
+    return decryptedValue;
+  }
+
+  encrypt(plainText) {
+    const messageToEncrypt = Account.decodeUTF8(plainText);
+    const randomBytes = nacl.randomBytes(NONCE_COMPUTE_LENGTH);
+    const nonce = this._generateNonce(randomBytes, this._key);
+    const cipherText = nacl.secretbox(messageToEncrypt, nonce, this._key);
+
+    const output = new Uint8Array(NONCE_LENGTH + cipherText.length);
+    output.set(nonce);
+    output.set(cipherText, NONCE_LENGTH);
+
+    return Account.encodeBase64(output);
+  }
+
+  decrypt(cipherText) {
+    const input = Account.decodeBase64(cipherText);
+    const nonce = input.subarray(0, NONCE_LENGTH);
+    const encryptedMessage = input.subarray(NONCE_LENGTH);
+    const decryptedMessage = nacl.secretbox.open(encryptedMessage, nonce, this._key);
+
+    return Account.encodeUTF8(decryptedMessage);
   }
 }
 
 export default Account;
-export { ErrorAuthenticationFail }

@@ -43,15 +43,35 @@ class Api {
     return response.ok;
   }
 
+  async _getKey() {
+    const response = await this._get('bootstrap');
+
+    if (!response.ok) throw new Error();
+
+    const receivedJson = await response.json();
+    const encryptedKey = receivedJson.EncryptedKey;
+    const key = this._account.decryptWithKeyPair(encryptedKey);
+
+    return key;
+  }
+
   async signIn() {
     const data = this._account.toString();
     const response = await this._post('signin', data);
 
     if (!response.ok) return false;
 
-    const receivedJson = await response.json();
-    const encryptedToken = receivedJson.EncryptedToken;
-    this._token = this._account.decrypt(encryptedToken);
+    try {
+      const receivedJson = await response.json();
+      const encryptedToken = receivedJson.EncryptedToken;
+      const uint8Token = this._account.decryptWithKeyPair(encryptedToken);
+      this._token = Account.encodeUTF8(uint8Token);
+
+      const key = await this._getKey();
+      this._account.key = key;
+    } catch(error) {
+      return false;
+    }
 
     await this._saveAccountData();
 
