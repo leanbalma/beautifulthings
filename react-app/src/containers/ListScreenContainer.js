@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
+import api from 'api';
+
 import { scheduleNotifications, signOut } from 'actions/account';
 import { retrieveEntriesAsync, deleteEntryAsync } from 'actions/entriesByDate';
 
-import { setNotifications, clearNotifications } from 'notifications';
+import { setNotifications } from 'notifications';
 
 import { changeHash, SCREENS_HASHES } from 'AppRouter';
 import { showAlertModal } from 'utils/alertModal';
@@ -106,7 +108,7 @@ class ListScreenContainer extends React.PureComponent {
   }
 
   _onSignOut = () => {
-    clearNotifications();
+    api.signOut();
     this.props.dispatch(signOut());
     changeHash(SCREENS_HASHES.start);
   }
