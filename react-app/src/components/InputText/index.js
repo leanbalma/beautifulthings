@@ -96,6 +96,8 @@ export default class InputText extends React.PureComponent {
           <input
             className={inputStyle}
             autoCapitalize="off"
+            autoComplete="off"
+            autoCorrect="off"
             type={inputType}
             placeholder={placeholder || ''}
             onKeyDown={this._handleKeyDown}
