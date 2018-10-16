@@ -18,6 +18,12 @@ export default class TextArea extends React.PureComponent {
     currentText: this.props.text,
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.text !== nextProps.text) {
+      this.setState({ currentText: nextProps.text });
+    }
+  }
+
   _setTextAreaRef = element => this._textArea = element;
 
   _handleChange = event => {

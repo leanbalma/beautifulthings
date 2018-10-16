@@ -38,15 +38,15 @@ class EditScreenContainer extends React.PureComponent {
     dispatch: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
+  state = {
+    discardChangesModalVisible: false,
 
-    this._initialDate = props.match.params.date;
-    this._initialText = props.entriesByDate[this._initialDate] || "";
-
-    this.state = {
-      discardChangesModalVisible: false,
-    }
+    /**
+     * It will contains the value of the new date
+     * selected by the user when the date picker is
+     * used.
+     */
+    date: null,
   }
 
   componentDidMount() {
@@ -58,7 +58,21 @@ class EditScreenContainer extends React.PureComponent {
   }
 
   _toggleDiscardCangesModalVisibility = () => {
-    this.setState({ discardChangesModalVisible: !this.state.discardChangesModalVisible });
+    this.setState({
+      discardChangesModalVisible: !this.state.discardChangesModalVisible,
+      date: null,
+    });
+  }
+
+  _discardChanges = () => {
+    const { date } = this.state;
+
+    if (!date) {
+      this._goBack();
+    } else {
+      changeHash(SCREENS_HASHES.edit(date));
+      this._toggleDiscardCangesModalVisibility();
+    }
   }
 
   _goBack = () => changeHash(SCREENS_HASHES.list);
@@ -87,9 +101,18 @@ class EditScreenContainer extends React.PureComponent {
     }
   }
 
+  _onDateChange = date => {
+    this.setState({
+      discardChangesModalVisible: true,
+      date,
+    });
+  }
+
   render() {
+    const { match, entriesByDate } = this.props;
+
     const discardChangesBtn = (
-      <Button onClick={this._goBack} small>
+      <Button onClick={this._discardChanges} small>
         <FormattedMessage id="Yes" />
       </Button>);
 
@@ -98,6 +121,11 @@ class EditScreenContainer extends React.PureComponent {
         <FormattedMessage id="No" />
       </Button>
     );
+
+    const date = match.params.date;
+    const text = entriesByDate[date] || "";
+    this._initialDate = date;
+    this._initialText = text;
 
     return (
       <div>
@@ -108,10 +136,11 @@ class EditScreenContainer extends React.PureComponent {
           secondaryButton={avoidDiscardChangesBtn}
         />
         <EditScreen
-          date={this._initialDate}
-          text={this._initialText}
+          date={date}
+          text={text}
           onBack={this._onBack}
           onSave={this._onSave}
+          onDateChange={this._onDateChange}
         />
       </div>
     );
