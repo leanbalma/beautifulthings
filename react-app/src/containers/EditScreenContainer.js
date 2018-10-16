@@ -40,6 +40,13 @@ class EditScreenContainer extends React.PureComponent {
 
   state = {
     discardChangesModalVisible: false,
+
+    /**
+     * It will contains the value of the new date
+     * selected by the user when the date picker is
+     * used.
+     */
+    date: null,
   }
 
   componentDidMount() {
@@ -51,7 +58,21 @@ class EditScreenContainer extends React.PureComponent {
   }
 
   _toggleDiscardCangesModalVisibility = () => {
-    this.setState({ discardChangesModalVisible: !this.state.discardChangesModalVisible });
+    this.setState({
+      discardChangesModalVisible: !this.state.discardChangesModalVisible,
+      date: null,
+    });
+  }
+
+  _discardChanges = () => {
+    const { date } = this.state;
+
+    if (!date) {
+      this._goBack();
+    } else {
+      changeHash(SCREENS_HASHES.edit(date));
+      this._toggleDiscardCangesModalVisibility();
+    }
   }
 
   _goBack = () => changeHash(SCREENS_HASHES.list);
@@ -80,13 +101,18 @@ class EditScreenContainer extends React.PureComponent {
     }
   }
 
-  _onDateChange = date => changeHash(SCREENS_HASHES.edit(date));
+  _onDateChange = date => {
+    this.setState({
+      discardChangesModalVisible: true,
+      date,
+    });
+  }
 
   render() {
     const { match, entriesByDate } = this.props;
 
     const discardChangesBtn = (
-      <Button onClick={this._goBack} small>
+      <Button onClick={this._discardChanges} small>
         <FormattedMessage id="Yes" />
       </Button>);
 
