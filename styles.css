@@ -1,0 +1,81 @@
+@font-face {
+  font-family: BariolRegular;
+  src: url("BariolRegular.otf") format("opentype");
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: BariolRegular;
+  background: #7becef url('./assets/img/Background.svg') left top/contain;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.sun {
+  margin-top: 5px;
+  width: auto;
+  height: 100px;
+}
+
+.logo {
+  max-width: 300px;
+  max-height: 200px;
+}
+
+.main {
+  color: #777;
+  width: 90%;
+  max-width: 600px;
+  height: 100%;
+  display: flex;
+  max-height: 400px;
+  flex-direction: column;
+  flex-grow: 1;
+  align-self: center;
+  background-color: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.trademarks {
+  height: 20px;
+  text-align: left;
+  font-size: 8pt;
+}
+
+.stores {
+  height: 50%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  flex-grow: 2;
+  flex-wrap: wrap;
+}
+
+.store-google {
+  margin: 0px;
+  width: auto;
+  height: 75px;
+}
+
+.store-apple {
+  margin: 5px;
+  width: auto;
+  height: 50px;
+}
+
+.unixono {
+  width: inherit;
+  height: 40px;
+  margin-bottom: 8px;
+}
