@@ -1,7 +1,7 @@
 import Account from 'account';
 import api from 'api';
 
-import { DAILY } from 'notifications';
+import { getSchedule, DAILY } from 'notifications';
 
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
@@ -45,4 +45,18 @@ export const signUpAsync = async (username, password) => {
   const signedUp = await api.signUp();
 
   return signedUp;
+}
+
+export const initSavedAccountAsync = () => async dispatch => {
+  try {
+    const savedAccountUsername = await api.initSavedAccount();
+    if (!savedAccountUsername) return false;
+
+    const notifications = await getSchedule();
+    dispatch(signIn(savedAccountUsername, notifications));
+
+    return true;
+  } catch (error) {
+    return false;
+  }
 }

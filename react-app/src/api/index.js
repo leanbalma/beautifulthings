@@ -141,7 +141,7 @@ class Api {
   }
 
   async initSavedAccount() {
-    let savedAccountSuccessfulyInitialized = false;
+    let savedAccountUsername = "";
 
     try {
       await keystore.init();
@@ -150,21 +150,21 @@ class Api {
 
       const deserializedSavedAccount = JSON.parse(serializedSavedAccount);
 
-      const savedAccountUsername = deserializedSavedAccount.username;
+      savedAccountUsername = deserializedSavedAccount.username;
       const savedAccountKeyPair = {
         publicKey: Uint8Array.from(deserializedSavedAccount.publicKey),
         secretKey: Uint8Array.from(deserializedSavedAccount.secretKey),
       };
+      const savedKey = Uint8Array.from(deserializedSavedAccount.key);
 
       this._token = savedToken;
       this.initAccount(savedAccountUsername, savedAccountKeyPair);
-
-      savedAccountSuccessfulyInitialized = true;
+      this._account.key = savedKey;
     } catch (error) {
       /* Nothing here. If the account data cannot be loaded, the app works normally and user must signin */
     }
 
-    return savedAccountSuccessfulyInitialized;
+    return savedAccountUsername;
   }
 }
 
