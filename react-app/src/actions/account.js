@@ -20,9 +20,11 @@ const signIn = (username, notifications = DAILY) => ({
   },
 });
 
-export const signOut = () => ({
+export const signOut = () => {
+  api.signOut();
+  return {
   type: SIGN_OUT,
-});
+}};
 
 export const scheduleNotifications = notifications => ({
   type: SCHEDULE_NOTIFICATIONS,

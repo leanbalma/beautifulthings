@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
-import api from 'api';
-
 import { scheduleNotifications, signOut } from 'actions/account';
 import { retrieveEntriesAsync, deleteEntryAsync } from 'actions/entriesByDate';
 
@@ -67,6 +65,8 @@ class ListScreenContainer extends React.PureComponent {
         await retrieveEntriesAsync(currentDate)(this.props.dispatch);
       } catch (error) {
         showAlertModal("Cannot connect to the server");
+        this.props.dispatch(signOut());
+        changeHash(SCREENS_HASHES.start);
       } finally {
         hideLoadingModal();
       }
@@ -108,7 +108,6 @@ class ListScreenContainer extends React.PureComponent {
   }
 
   _onSignOut = () => {
-    api.signOut();
     this.props.dispatch(signOut());
     changeHash(SCREENS_HASHES.start);
   }
