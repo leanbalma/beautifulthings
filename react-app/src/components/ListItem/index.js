@@ -59,7 +59,7 @@ export default class ListItem extends React.PureComponent {
                 year="numeric"
                 month="short"
                 day="numeric"
-                value={date + " 00:00:00"}
+                value={Date(date + " 00:00:00")}
               />
             </div>
             <div className={textPreviewStyle}>
