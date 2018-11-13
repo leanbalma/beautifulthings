@@ -95,7 +95,7 @@ export default class InputText extends React.PureComponent {
         <div className={styles.inputContainer}>
           <input
             className={inputStyle}
-            autoCapitalize="off"
+            autoCapitalize="none"
             autoComplete="off"
             autoCorrect="off"
             type={inputType}
