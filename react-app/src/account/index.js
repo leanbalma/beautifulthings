@@ -86,13 +86,11 @@ class Account {
   serialize() {
     const publicKey = Array.from(this._pk);
     const secretKey = Array.from(this._sk);
-    const key = Array.from(this._key);
 
     return JSON.stringify({
       username: this._username,
       publicKey,
       secretKey,
-      key,
     });
   }
 

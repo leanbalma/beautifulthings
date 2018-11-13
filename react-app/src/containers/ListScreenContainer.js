@@ -64,7 +64,7 @@ class ListScreenContainer extends React.PureComponent {
         const currentDate = getCurrentDateString();
         await retrieveEntriesAsync(currentDate)(this.props.dispatch);
       } catch (error) {
-        showAlertModal("Cannot connect to the server");
+        showAlertModal("Session expired, please login");
         this.props.dispatch(signOut());
         changeHash(SCREENS_HASHES.start);
       } finally {

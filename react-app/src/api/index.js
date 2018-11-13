@@ -128,7 +128,6 @@ class Api {
       const serializedAccount = this._account.serialize();
 
       await keystore.init();
-      await keystore.set('token', this._token);
       await keystore.set('account', serializedAccount);
     } catch (error) {
       /* Nothing here. If the account data cannot be saved, the app works normally without this feature */
@@ -149,7 +148,6 @@ class Api {
 
     try {
       await keystore.init();
-      const savedToken = await keystore.get('token');
       const serializedSavedAccount = await keystore.get('account');
 
       const deserializedSavedAccount = JSON.parse(serializedSavedAccount);
@@ -159,15 +157,11 @@ class Api {
         publicKey: Uint8Array.from(deserializedSavedAccount.publicKey),
         secretKey: Uint8Array.from(deserializedSavedAccount.secretKey),
       };
-      const savedKey = Uint8Array.from(deserializedSavedAccount.key);
-
-      this._token = savedToken;
       this.initAccount(savedAccountUsername, savedAccountKeyPair);
-      this._account.key = savedKey;
+      await this.signIn();
     } catch (error) {
       /* Nothing here. If the account data cannot be loaded, the app works normally and user must signin */
     }
-
     return savedAccountUsername;
   }
 }
