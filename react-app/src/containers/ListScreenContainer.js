@@ -64,7 +64,7 @@ class ListScreenContainer extends React.PureComponent {
       try {
         showLoadingModal("Loading");
         const currentDate = getCurrentDateString();
-        await retrieveEntriesAsync('2018-01-01', currentDate)(this.props.dispatch);
+        await retrieveEntriesAsync(currentDate)(this.props.dispatch);
       } catch (error) {
         showAlertModal("Cannot connect to the server");
       } finally {

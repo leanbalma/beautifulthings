@@ -3,8 +3,11 @@ import * as keystore from 'keystore';
 import { createEntry } from 'utils/entry';
 import { setNotifications, clearNotifications } from 'notifications';
 
+
 const _HOST = 'https://server.beautifulthings.app/';
 // const _HOST = 'http://localhost:8080/';
+
+const fromDate = '2018-01-01';
 
 class ErrorCannotGetEntries extends Error {}
 
@@ -99,8 +102,8 @@ class Api {
     return response.ok;
   }
 
-  async getEntries(from, to) {
-    const response = await this._get(`things/${from}/${to}`);
+  async getEntries(to) {
+    const response = await this._get(`things/${fromDate}/${to}`);
 
     if (!response.ok) throw new ErrorCannotGetEntries();
 
