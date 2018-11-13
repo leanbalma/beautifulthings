@@ -3,7 +3,8 @@ import * as keystore from 'keystore';
 import { createEntry } from 'utils/entry';
 import { setNotifications, clearNotifications } from 'notifications';
 
-const _HOST = 'http://localhost/';
+const _HOST = 'https://server.beautifulthings.app/';
+// const _HOST = 'http://localhost:8080/';
 
 class ErrorCannotGetEntries extends Error {}
 
