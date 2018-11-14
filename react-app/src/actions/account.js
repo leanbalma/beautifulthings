@@ -54,8 +54,8 @@ export const initSavedAccountAsync = () => async dispatch => {
     const savedAccountUsername = await api.initSavedAccount();
     if (!savedAccountUsername) return false;
 
-    const notifications = await getSchedule();
-    dispatch(signIn(savedAccountUsername, notifications));
+    // const notifications = await getSchedule();
+    dispatch(signIn(savedAccountUsername));
 
     return true;
   } catch (error) {
