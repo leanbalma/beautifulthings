@@ -58,11 +58,11 @@ class Api {
 
     return key;
   }
-
+  
   async signIn() {
     const data = this._account.toString();
     const response = await this._post('signin', data);
-
+    
     if (!response.ok) return false;
 
     try {
@@ -149,15 +149,14 @@ class Api {
     try {
       await keystore.init();
       const serializedSavedAccount = await keystore.get('account');
-
       const deserializedSavedAccount = JSON.parse(serializedSavedAccount);
-
       savedAccountUsername = deserializedSavedAccount.username;
       const savedAccountKeyPair = {
         publicKey: Uint8Array.from(deserializedSavedAccount.publicKey),
         secretKey: Uint8Array.from(deserializedSavedAccount.secretKey),
       };
       this.initAccount(savedAccountUsername, savedAccountKeyPair);
+      await this.signIn();
     } catch (error) {
       /* Nothing here. If the account data cannot be loaded, the app works normally and user must signin */
     }

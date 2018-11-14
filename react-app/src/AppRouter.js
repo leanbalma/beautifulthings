@@ -38,7 +38,6 @@ class AppRouter extends React.PureComponent {
       showLoadingModal('Loading');
       const savedAccountInited = await this.props.dispatch(initSavedAccountAsync());
       if (savedAccountInited) {
-        await this.signIn();
         changeHash(SCREENS_HASHES.list);
       }
     } catch (error) {
