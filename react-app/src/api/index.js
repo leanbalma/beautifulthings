@@ -158,7 +158,6 @@ class Api {
         secretKey: Uint8Array.from(deserializedSavedAccount.secretKey),
       };
       this.initAccount(savedAccountUsername, savedAccountKeyPair);
-      await this.signIn();
     } catch (error) {
       /* Nothing here. If the account data cannot be loaded, the app works normally and user must signin */
     }
