@@ -24,11 +24,11 @@
     "tweetnacl-util": "^0.15.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "start": "npx cross-env NODE_PATH=src react-scripts start",
+    "build": "npx cross-env NODE_PATH=src react-scripts build",
+    "test": "react-scripts test --env=jsdom --modulePaths=src",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 9009 -s public",
+    "storybook": "npx cross-env NODE_PATH=src start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public"
   },
   "devDependencies": {

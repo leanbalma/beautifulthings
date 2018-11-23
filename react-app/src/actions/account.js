@@ -20,9 +20,11 @@ const signIn = (username, notifications = DAILY) => ({
   },
 });
 
-export const signOut = () => ({
+export const signOut = () => {
+  api.signOut();
+  return {
   type: SIGN_OUT,
-});
+}};
 
 export const scheduleNotifications = notifications => ({
   type: SCHEDULE_NOTIFICATIONS,
@@ -52,8 +54,8 @@ export const initSavedAccountAsync = () => async dispatch => {
     const savedAccountUsername = await api.initSavedAccount();
     if (!savedAccountUsername) return false;
 
-    const notifications = await getSchedule();
-    dispatch(signIn(savedAccountUsername, notifications));
+    // const notifications = await getSchedule();
+    dispatch(signIn(savedAccountUsername));
 
     return true;
   } catch (error) {

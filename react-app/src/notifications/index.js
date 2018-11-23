@@ -3,8 +3,8 @@ import { getCurrentDateString } from 'utils/date';
 
 import es from 'locale/es';
 
-const DAILY = 1;
-const WEEKLY = 2;
+export const DAILY = 1;
+export const WEEKLY = 2;
 
 const SUNDAY_WEEKDAY = 7;
 
@@ -74,4 +74,4 @@ function getSchedule() {
   });
 }
 
-export { setNotifications, clearNotifications, getSchedule, DAILY, WEEKLY }
+export { setNotifications, clearNotifications, getSchedule }

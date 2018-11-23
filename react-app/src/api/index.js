@@ -3,7 +3,11 @@ import * as keystore from 'keystore';
 import { createEntry } from 'utils/entry';
 import { setNotifications, clearNotifications } from 'notifications';
 
-const _HOST = 'http://localhost/';
+
+const _HOST = 'https://server.beautifulthings.app/';
+// const _HOST = 'http://localhost:8080/';
+
+const fromDate = '2018-01-01';
 
 class ErrorCannotGetEntries extends Error {}
 
@@ -54,11 +58,11 @@ class Api {
 
     return key;
   }
-
+  
   async signIn() {
     const data = this._account.toString();
     const response = await this._post('signin', data);
-
+    
     if (!response.ok) return false;
 
     try {
@@ -98,8 +102,8 @@ class Api {
     return response.ok;
   }
 
-  async getEntries(from, to) {
-    const response = await this._get(`things/${from}/${to}`);
+  async getEntries(to) {
+    const response = await this._get(`things/${fromDate}/${to}`);
 
     if (!response.ok) throw new ErrorCannotGetEntries();
 
@@ -124,7 +128,6 @@ class Api {
       const serializedAccount = this._account.serialize();
 
       await keystore.init();
-      await keystore.set('token', this._token);
       await keystore.set('account', serializedAccount);
     } catch (error) {
       /* Nothing here. If the account data cannot be saved, the app works normally without this feature */
@@ -145,25 +148,18 @@ class Api {
 
     try {
       await keystore.init();
-      const savedToken = await keystore.get('token');
       const serializedSavedAccount = await keystore.get('account');
-
       const deserializedSavedAccount = JSON.parse(serializedSavedAccount);
-
       savedAccountUsername = deserializedSavedAccount.username;
       const savedAccountKeyPair = {
         publicKey: Uint8Array.from(deserializedSavedAccount.publicKey),
         secretKey: Uint8Array.from(deserializedSavedAccount.secretKey),
       };
-      const savedKey = Uint8Array.from(deserializedSavedAccount.key);
-
-      this._token = savedToken;
       this.initAccount(savedAccountUsername, savedAccountKeyPair);
-      this._account.key = savedKey;
+      await this.signIn();
     } catch (error) {
       /* Nothing here. If the account data cannot be loaded, the app works normally and user must signin */
     }
-
     return savedAccountUsername;
   }
 }

@@ -20,8 +20,8 @@ const deleteEntry = date => ({
   },
 });
 
-export const retrieveEntriesAsync = (from, to) => async dispatch => {
-  const entries = await api.getEntries(from, to);
+export const retrieveEntriesAsync = (to) => async dispatch => {
+  const entries = await api.getEntries(to);
 
   entries.forEach(entry => dispatch(editEntry(entry.date, entry.text)));
 }
